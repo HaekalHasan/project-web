@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Profile</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+    <h1>Profile</h1>
+    <form method="POST" action="php/profile.php">
+        Name: <input type="text" name="name" value="<?php echo $user['name']; ?>"><br>
+        Email: <input type="email" name="email" value="<?php echo $user['email']; ?>"><br>
+        <input type="submit" value="Update">
+    </form>
+
+    <h2>Upload Document</h2>
+    <form method="POST" action="php/upload.php" enctype="multipart/form-data">
+        <input type="file" name="document"><br>
+        <input type="submit" value="Upload">
+    </form>
+</body>
+</html>
