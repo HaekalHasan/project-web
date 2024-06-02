@@ -31,13 +31,14 @@ $conn->close();
 <html>
 <head>
     <title>Manage Schedule</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
 </head>
 <body>
     <h1>Manage Schedule</h1>
     <form method="POST" action="">
-        Date and Time: <input type="text" name="date_time"><br>
+        Date and Time: <input type="datetime-local" name="date_time"><br>
         Capacity: <input type="number" name="capacity"><br>
-        Duration: <input type="text" name="duration"><br>
+        Duration (minutes): <input type="number" name="duration"><br>
         Room: <input type="text" name="room"><br>
         <input type="submit" value="Add Schedule">
     </form>

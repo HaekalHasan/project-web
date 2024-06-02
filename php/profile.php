@@ -3,11 +3,14 @@ session_start();
 include 'config.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.html");
+    header("Location: ../login.html");
     exit();
 }
 
 $user_id = $_SESSION['user_id'];
+$sql = "SELECT * FROM users WHERE id='$user_id'";
+$result = $conn->query($sql);
+$user = $result->fetch_assoc();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST['name'];
@@ -16,22 +19,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sql = "UPDATE users SET name='$name', email='$email' WHERE id='$user_id'";
 
     if ($conn->query($sql) === TRUE) {
-        echo "Profile updated successfully!";
+        echo "Record updated successfully";
     } else {
-        echo "Error updating profile: " . $conn->error;
+        echo "Error updating record: " . $conn->error;
     }
-}
 
-$sql = "SELECT * FROM users WHERE id='$user_id'";
-$result = $conn->query($sql);
-$user = $result->fetch_assoc();
-$conn->close();
+    $conn->close();
+}
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
     <title>Profile</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
 </head>
 <body>
     <h1>Profile</h1>

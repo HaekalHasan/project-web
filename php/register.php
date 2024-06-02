@@ -1,4 +1,5 @@
 <?php
+session_start();
 include 'config.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -10,10 +11,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sql = "INSERT INTO users (name, email, password, role) VALUES ('$name', '$email', '$password', '$role')";
 
     if ($conn->query($sql) === TRUE) {
-        echo "Registration successful!";
+        echo "New record created successfully";
+        header("Location: ../login.html");
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
+
+    $conn->close();
 }
-$conn->close();
 ?>
