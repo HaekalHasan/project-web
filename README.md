@@ -18,13 +18,13 @@
 
 <!-- Anggota Tim -->
 ## Anggota Tim
-| NIM           | Name         |
-| ------------- |--------------|
-| 2210512038    | Haekal Hasan T |
-| 22105120xx    | Name 2       |
-| 22105120xx    | Name 3       |
-| 22105120xx    | Name 4       |
-| 22105120xx    | Name 5       |
+| NIM           | Name            |
+| ------------- |-----------------|
+| 2210512038    | Haekal Hasan T  |
+| 2210512040    | Septi Bintang A |
+| 2210512041    | Jovan Vian T    |
+| 2210512042    | Ajeng Azzahroh  |
+| 2210512043    | Ahmad Maulana Y |
 
 <!-- Latar Belakang -->
 ## Latar Belakang
