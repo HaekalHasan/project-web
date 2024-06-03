@@ -3,7 +3,7 @@ session_start();
 include 'php/config.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: index.php");
+    header("Location: login.php");
     exit();
 }
 
@@ -33,12 +33,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
-    <h1>Profile</h1>
-    <form method="POST" action="">
-        Name: <input type="text" name="name" value="<?php echo $user['name']; ?>"><br>
-        Email: <input type="email" name="email" value="<?php echo $user['email']; ?>"><br>
-        <input type="submit" value="Update">
-    </form>
-    <a href="schedule.php">View Schedule</a>
+    <div class="container profile">
+        <h1>Profile</h1>
+        <form method="POST" action="">
+            Name: <input type="text" name="name" value="<?php echo $user['name']; ?>"><br>
+            Email: <input type="email" name="email" value="<?php echo $user['email']; ?>"><br>
+            <input type="submit" value="Update">
+        </form>
+        <a href="schedule.php">View Schedule</a>
+    </div>
 </body>
 </html>
+

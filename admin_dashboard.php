@@ -15,9 +15,12 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
     <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
-    <h1>Admin Dashboard</h1>
-    <a href="php/admin/manage_users.php">Manage Users</a><br>
-    <a href="php/admin/manage_schedule.php">Manage Schedule</a><br>
-    <a href="php/admin/manage_documents.php">Manage Documents</a>
+    <div class="container admin-dashboard">
+        <h1>Admin Dashboard</h1>
+        <a href="php/admin/manage_users.php">Manage Users</a><br>
+        <a href="php/admin/manage_schedule.php">Manage Schedule</a><br>
+        <a href="php/admin/manage_documents.php">Manage Documents</a>
+    </div>
 </body>
 </html>
+

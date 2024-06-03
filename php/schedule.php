@@ -1,9 +1,9 @@
 <?php
 session_start();
-include 'php/config.php';
+include 'config.php';
 
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'student') {
-    header("Location: login.php");
+    header("Location: ../login.html");
     exit();
 }
 
@@ -18,6 +18,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
+
+    $conn->close();
 }
 
 $sql = "SELECT * FROM schedules";
@@ -28,20 +30,17 @@ $schedules = $conn->query($sql);
 <html>
 <head>
     <title>Schedule</title>
-    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
 </head>
 <body>
-    <div class="container schedule">
-        <h1>Available Schedules</h1>
-        <form method="POST" action="">
-            <select name="schedule_id">
-                <?php while($schedule = $schedules->fetch_assoc()): ?>
-                    <option value="<?php echo $schedule['id']; ?>"><?php echo $schedule['date_time']; ?></option>
-                <?php endwhile; ?>
-            </select>
-            <input type="submit" value="Book Schedule">
-        </form>
-    </div>
+    <h1>Available Schedules</h1>
+    <form method="POST" action="">
+        <select name="schedule_id">
+            <?php while($schedule = $schedules->fetch_assoc()): ?>
+                <option value="<?php echo $schedule['id']; ?>"><?php echo $schedule['date_time']; ?></option>
+            <?php endwhile; ?>
+        </select>
+        <input type="submit" value="Book Schedule">
+    </form>
 </body>
 </html>
-

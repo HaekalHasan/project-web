@@ -1,38 +1,148 @@
+/* Global Styles */
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     margin: 0;
     padding: 0;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
     height: 100vh;
 }
 
-form {
-    background: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+h1 {
+    color: #333;
+    text-align: center;
 }
 
-input[type="text"], input[type="email"], input[type="password"], select {
-    width: 100%;
+p {
+    color: #666;
+    text-align: center;
+}
+
+a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Container */
+.container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    margin: 20px;
+}
+
+/* Form Styles */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select {
     padding: 10px;
     margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 }
 
 input[type="submit"] {
-    background: #5cb85c;
-    color: #fff;
+    padding: 10px;
+    background-color: #3498db;
     border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+    border-radius: 4px;
+    color: #fff;
     cursor: pointer;
 }
 
 input[type="submit"]:hover {
-    background: #4cae4c;
+    background-color: #2980b9;
+}
+
+/* Error Message */
+.error {
+    color: red;
+    text-align: center;
+    margin: 10px 0;
+}
+
+/* Success Message */
+.success {
+    color: green;
+    text-align: center;
+    margin: 10px 0;
+}
+
+/* Navigation Links */
+.nav-links {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.nav-links a {
+    margin: 0 5px;
+}
+
+/* Admin Dashboard */
+.admin-dashboard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.admin-dashboard a {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #3498db;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    width: 200px;
+}
+
+.admin-dashboard a:hover {
+    background-color: #2980b9;
+}
+
+/* Profile Page */
+.profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile form {
+    width: 100%;
+}
+
+.profile a {
+    margin-top: 10px;
+    color: #3498db;
+}
+
+.profile a:hover {
+    text-decoration: underline;
+}
+
+/* Schedule Page */
+.schedule {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.schedule form {
+    width: 100%;
 }
