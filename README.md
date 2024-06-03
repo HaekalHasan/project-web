@@ -1,6 +1,6 @@
 <p align="center">
   <h2 align="center">
-    INI NAMANYA APA
+    WEBSITE PENGAMBILAN JADWAL SIDANG (JUDUL BLM FIX)
   </h2>
 </p>
 
@@ -29,18 +29,26 @@
 <!-- Latar Belakang -->
 ## Latar Belakang
 
-Test
+Dalam era digital saat ini, efisiensi dan kemudahan akses menjadi dua hal yang sangat penting dalam berbagai aspek kehidupan, termasuk dalam dunia pendidikan tinggi. Proses penjadwalan sidang skripsi, tesis, atau disertasi sering kali menjadi salah satu tantangan terbesar bagi mahasiswa, dosen, dan pihak administrasi kampus. Proses manual yang melibatkan banyak dokumen fisik, komunikasi yang tidak terorganisir, dan kesulitan dalam koordinasi jadwal dapat mengakibatkan ketidaknyamanan dan efisiensi yang rendah.
+
+Peningkatan jumlah mahasiswa yang harus menjalani sidang setiap semester juga menambah kompleksitas dalam pengelolaan jadwal sidang. Ketidakmampuan untuk memantau dan mengelola jadwal secara efektif dapat menyebabkan penundaan, konflik jadwal, dan ketidakpuasan di antara mahasiswa dan dosen. Selain itu, ketidakmampuan untuk menyimpan dan mengelola dokumen secara terpusat dan aman juga menjadi tantangan tersendiri yang perlu diatasi.
+
+Melihat kebutuhan ini, hadirnya sebuah platform digital yang terintegrasi dan efisien menjadi solusi yang sangat dibutuhkan. Platform ini harus mampu mengotomatisasi proses penjadwalan, menyediakan sistem notifikasi yang efektif, memudahkan unggah dan manajemen dokumen, serta memberikan kemudahan akses dan kontrol bagi semua pengguna. Dengan demikian, diharapkan dapat tercipta proses yang lebih transparan, terorganisir, dan efisien, yang pada akhirnya dapat meningkatkan pengalaman pengguna secara keseluruhan.
+
+Oleh karena itu, website ini dirancang dengan tujuan untuk menyediakan platform yang memenuhi kebutuhan tersebut. Dengan fitur-fitur seperti registrasi dan login, profil pengguna, pengambilan dan modifikasi jadwal sidang, notifikasi, serta unggah dokumen, website ini diharapkan dapat memberikan solusi yang komprehensif dan efisien dalam mengelola jadwal sidang, sekaligus meningkatkan kenyamanan dan kepuasan pengguna.
 
 <!-- Tujuan dan Manfaat -->
 ## Tujuan dan Manfaat
 
 Tujuannya:
+Tujuan utama dari pembuatan website ini adalah untuk menyediakan platform yang terintegrasi dan efisien bagi mahasiswa, dosen, dan admin dalam mengelola berbagai aspek terkait jadwal sidang. 
 
 Beberapa manfaat yang ada antara lain :
-* bantu
-* dapet
-* sidang
-* gampang
+* Menjaga keamanan data pengguna dengan membatasi akses hanya untuk pengguna yang terdaftar dan terverifikasi. 
+* Memungkinkan pengguna untuk melacak riwayat jadwal sidang mereka, memberikan catatan yang jelas dan terorganisir. 
+* Memudahkan mahasiswa dalam melihat dan memilih jadwal sidang yang tersedia secara online.
+* Mengurangi kemungkinan konflik jadwal dengan menyediakan opsi untuk modifikasi sebelum batas waktu tertentu.
+* Mengurangi kebutuhan akan dokumen fisik, mempermudah proses administrasi dengan digitalisasi dokumen dan mudah diakses saat dibutuhkan. 
 
 <!-- Penjelasan Aplikasi -->
 ## Penjelasan Aplikasi
