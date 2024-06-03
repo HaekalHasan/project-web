@@ -1,9 +1,9 @@
 <?php
 session_start();
-include 'config.php';
+include 'php/config.php';
 
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'student') {
-    header("Location: ../login.html");
+    header("Location: index.php");
     exit();
 }
 
@@ -18,8 +18,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
-
-    $conn->close();
 }
 
 $sql = "SELECT * FROM schedules";
@@ -30,7 +28,7 @@ $schedules = $conn->query($sql);
 <html>
 <head>
     <title>Schedule</title>
-    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
     <h1>Available Schedules</h1>

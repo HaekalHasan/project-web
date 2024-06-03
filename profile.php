@@ -1,9 +1,9 @@
 <?php
 session_start();
-include 'config.php';
+include 'php/config.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: ../login.html");
+    header("Location: index.php");
     exit();
 }
 
@@ -23,8 +23,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         echo "Error updating record: " . $conn->error;
     }
-
-    $conn->close();
 }
 ?>
 
@@ -32,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html>
 <head>
     <title>Profile</title>
-    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
     <h1>Profile</h1>
@@ -41,5 +39,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         Email: <input type="email" name="email" value="<?php echo $user['email']; ?>"><br>
         <input type="submit" value="Update">
     </form>
+    <a href="schedule.php">View Schedule</a>
 </body>
 </html>
