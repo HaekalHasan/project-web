@@ -20,6 +20,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
         <a href="php/admin/manage_users.php">Manage Users</a><br>
         <a href="php/admin/manage_schedule.php">Manage Schedule</a><br>
         <a href="php/admin/manage_documents.php">Manage Documents</a>
+        <a href="logout.php">Logout</a>
     </div>
 </body>
 </html>
