@@ -23,11 +23,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif (isset($_POST['delete_schedule_id'])) {
         $schedule_id = $_POST['delete_schedule_id'];
 
-        $sql = "DELETE FROM schedules WHERE id = '$schedule_id'";
+        $sql = "DELETE FROM bookings WHERE schedule_id = '$schedule_id'";
         if ($conn->query($sql) === TRUE) {
-            $success_message = "Schedule deleted successfully!";
-        } else {
-            $error_message = "Error: " . $sql . "<br>" . $conn->error;
+            $sql = "DELETE FROM schedules WHERE id = '$schedule_id'";
+            if ($conn->query($sql) === TRUE) {
+                $success_message = "Schedule deleted successfully!";
+            } else {
+                $error_message = "Error: " . $sql . "<br>" . $conn->error;
+            }
+        }else {
+            $error_message = "Error: ". $sql. "<br>". $conn->error;
         }
     }
 }
