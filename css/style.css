@@ -9,21 +9,26 @@ body {
     align-items: center;
     justify-content: center;
     height: 100vh;
+    background-image: url("upnvj_bg.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    backdrop-filter: brightness(50%);
 }
 
 h1 {
-    color: #333;
+    color: black;
     text-align: center;
 }
 
 p {
-    color: #666;
+    color: white;
     text-align: center;
 }
 
 a {
     color: #3498db;
     text-decoration: none;
+    padding-top: 5px;
 }
 
 a:hover {
@@ -136,6 +141,42 @@ input[type="submit"]:hover {
     text-decoration: underline;
 }
 
+/* Login Page */
+.login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login form {
+    width: 100%;
+}
+
+.login a {
+    margin-top: 10px;
+    color: #3498db;
+}
+
+.login a:hover {
+    text-decoration: underline;
+}
+
+/* Map Page */
+.map {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.map a {
+    margin-top: 10px;
+    color: #3498db;
+}
+
+.map a:hover {
+    text-decoration: underline;
+}
+
 /* Schedule Page */
 .schedule {
     display: flex;
@@ -145,4 +186,13 @@ input[type="submit"]:hover {
 
 .schedule form {
     width: 100%;
+}
+
+.schedule a {
+    margin-top: 10px;
+    color: #3498db;
+}
+
+.schedule a:hover {
+    text-decoration: underline;
 }

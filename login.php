@@ -45,14 +45,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
-    <div class="container">
+    <div class="container login">
         <h1>Login</h1>
         <form method="POST" action="">
             Email: <input type="email" name="email" required><br>
             Password: <input type="password" name="password" required><br>
             <input type="submit" value="Login">
         </form>
-        <p>Don't have an account? <a href="register.php">Register here</a></p>
+        <h4  id="p">Don't have an account? <a href="register.php">Register here</a></h4>
         <?php
         if (isset($error)) {
             echo "<p class='error'>$error</p>";

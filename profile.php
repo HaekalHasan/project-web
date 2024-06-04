@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sql = "UPDATE users SET name='$name', email='$email' WHERE id='$user_id'";
 
     if ($conn->query($sql) === TRUE) {
-        echo "Record updated successfully";
+        echo "<p style='color: white;'>Record updated successfully</p>";
     } else {
         echo "Error updating record: " . $conn->error;
     }
@@ -41,6 +41,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <input type="submit" value="Update">
         </form>
         <a href="schedule.php">View Schedule</a>
+        <a href="map.php">Check Map</a>
+        <a href="logout.php">Logout</a>
     </div>
 </body>
 </html>

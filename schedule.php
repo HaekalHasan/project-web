@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sql = "INSERT INTO bookings (student_id, schedule_id) VALUES ('$student_id', '$schedule_id')";
 
     if ($conn->query($sql) === TRUE) {
-        echo "Schedule booked successfully";
+        echo "<p style='color: white;'>Schedule booked successfully</p>";
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
@@ -41,6 +41,8 @@ $schedules = $conn->query($sql);
             </select>
             <input type="submit" value="Book Schedule">
         </form>
+        <a href="map.php">Check Map</a>
+        <a href="profile.php">Back to Profile</a>
     </div>
 </body>
 </html>
