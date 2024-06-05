@@ -60,6 +60,9 @@ $conn->close();
             <?php elseif (isset($error_message)): ?>
                 <div class="alert alert-danger"><?php echo $error_message; ?></div>
             <?php endif; ?>
+            <div class="d-flex justify-content-end mb-3">
+                <a href="../../admin_dashboard.php" class="btn btn-secondary">Back to Dashboard</a>
+            </div>
             <div class="table-responsive">
                 <table class="table table-striped mt-4">
                     <thead>
