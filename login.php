@@ -52,7 +52,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             Password: <input type="password" name="password" required><br>
             <input type="submit" value="Login">
         </form>
-        <h4  id="p">Don't have an account? <a href="register.php">Register here</a></h4>
         <?php
         if (isset($error)) {
             echo "<p class='error'>$error</p>";
