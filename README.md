@@ -54,7 +54,7 @@ Beberapa manfaat yang ada antara lain :
 ## Penjelasan Aplikasi
 
 Program web ini memiliki fitur-fitur antara lain :
-* Registrasi dan Login
+* Login
 * Profil Pengguna
 * Pengambilan Jadwal Sidang
 * Pembatalan dan Modifikasi Jadwal
