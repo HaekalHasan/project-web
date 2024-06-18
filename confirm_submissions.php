@@ -2,18 +2,42 @@
 session_start();
 include 'php/config.php';
 
-// Mengecek apakah user sudah login dan memiliki peran sebagai dosen
+// Ensure user is logged in and is a 'teacher'
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'teacher') {
-    // Jika tidak, arahkan ke halaman utama
     header("Location: login.php");
     exit();
 }
 
 $user_id = $_SESSION['user_id'];
-// Query untuk mendapatkan informasi user berdasarkan user_id
+// Fetch user information
 $sql = "SELECT * FROM users WHERE id='$user_id'";
 $result = $conn->query($sql);
 $user = $result->fetch_assoc();
+
+// Fetch submissions that are still 'pending' or 'approved'
+$sql_submissions = "SELECT * FROM schedules WHERE status IN ('pending', 'approved')";
+$submissions = $conn->query($sql_submissions);
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $schedule_id = $_POST['schedule_id'];
+    $action = $_POST['action'];
+
+    // Validate and process approval
+    if ($action === 'approve') {
+        $sql_update = "UPDATE schedules SET status='approved' WHERE schedule_id='$schedule_id'";
+        $status_message = "Submission has been approved.";
+        
+        if ($conn->query($sql_update) === TRUE) {
+            $message = $status_message;
+        } else {
+            $message = "Error updating record: " . $conn->error;
+        }
+    }
+
+    // Refresh page to reflect latest data
+    header("Location: confirm_submissions.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -21,12 +45,11 @@ $user = $result->fetch_assoc();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dosen Dashboard</title>
-    <!-- Memuat CSS dari Bootstrap dan FontAwesome untuk styling -->
+    <title>Confirm Submissions</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <style>
-        /* CSS untuk styling halaman */
+        /* CSS styling */
         body {
             background: #f4f4f4;
             font-family: Arial, sans-serif;
@@ -82,45 +105,9 @@ $user = $result->fetch_assoc();
             background: #0056b3;
             color: #fff;
         }
-        .dropdown-menu-right {
-            right: 0;
-            left: auto;
-        }
-        .profile-dropdown-menu,
-        .notification-dropdown-menu {
-            right: 0;
-            left: auto;
-            top: 50px;
-            display: none;
-            position: absolute;
-            z-index: 1000;
-        }
-        .dropdown.show .profile-dropdown-menu,
-        .dropdown.show .notification-dropdown-menu {
-            display: block;
-        }
-        .dashboard-container {
-            display: flex;
-            justify-content: space-between;
-        }
-        .dashboard-item {
-            width: 100%;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-        .dashboard-item h3 {
-            margin-bottom: 15px;
-        }
-        .dashboard-item p {
-            margin-bottom: 0;
-        }
     </style>
 </head>
 <body>
-<!-- Header dengan tombol toggle untuk menu sidebar dan dropdown untuk notifikasi serta profil -->
 <div class="header">
     <i class="fas fa-bars" id="menu-toggle"></i>
     <div class="d-flex align-items-center">
@@ -152,44 +139,52 @@ $user = $result->fetch_assoc();
         </div>
     </div>
 </div>
-<!-- Sidebar untuk navigasi -->
 <div class="sidebar" id="sidebar">
     <a href="dosen_dashboard.php"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a>
     <a href="confirm_submissions.php"><i class="fas fa-check-circle icon"></i> Confirm</a>
     <a href="logout.php"><i class="fas fa-sign-out-alt icon"></i> Logout</a>
 </div>
-<!-- Bagian utama dashboard -->
 <div class="dashboard" id="dashboard">
-<div class="header mb-4">
-        <h1>Lecturer Dashboard</h1>
-    </div>
-    <!-- Bagian container-fluid masih kosong -->
     <div class="container-fluid">
-        <!-- Content khusus dosen bisa ditambahkan di sini -->
+        <h1>Confirm Submissions</h1>
+        <?php if (!empty($message)): ?>
+            <div class="alert alert-info"><?php echo $message; ?></div>
+        <?php endif; ?>
+        <div class="row">
+            <?php while($submission = $submissions->fetch_assoc()): ?>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+
+                            <p class="card-text">
+                                <strong>Student           :</strong> <?php echo $submission['name']; ?><br>
+                                <strong>NIM               :</strong> <?php echo $submission['nim']; ?><br>
+                                <strong>Dosen Pembimbing 1:</strong> <?php echo $submission['dosen1']; ?><br>
+                                <strong>Dosen Pembimbing 2:</strong> <?php echo $submission['dosen2']; ?><br>
+                                <strong>Phone             :</strong> <?php echo $submission['no_hp']; ?><br>
+                                <strong>Date              :</strong> <?php echo $submission['booked_date']; ?><br>
+                                <strong>File Title        :</strong> <?php echo $submission['judul_ta']; ?><br>
+                                <strong>File              :</strong> <a href="<?php echo $submission['file_path']; ?>" target="_blank">Download</a>
+                            </p>
+                            <?php if ($submission['status'] === 'pending'): ?>
+                                <form method="POST" action="">
+                                    <input type="hidden" name="schedule_id" value="<?php echo $submission['schedule_id']; ?>">
+                                    <button type="submit" name="action" value="approve" class="btn btn-success">Approve</button>
+                                </form>
+                            <?php else: ?>
+                                <p>Status: <?php echo ucfirst($submission['status']); ?></p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+            <?php endwhile; ?>
+        </div>
     </div>
 </div>
-<!-- Memuat JavaScript dari jQuery, Popper.js, dan Bootstrap -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
-    // Menambahkan event listener untuk menampilkan atau menyembunyikan menu dropdown profil
-    document.getElementById('navbarDropdown').addEventListener('click', function() {
-        var dropdownMenu = document.querySelector('.profile-dropdown-menu');
-        var notificationMenu = document.querySelector('.notification-dropdown-menu');
-        dropdownMenu.classList.toggle('show');
-        notificationMenu.classList.remove('show');
-    });
-
-    // Menambahkan event listener untuk menampilkan atau menyembunyikan menu dropdown notifikasi
-    document.getElementById('notificationDropdown').addEventListener('click', function() {
-        var notificationMenu = document.querySelector('.notification-dropdown-menu');
-        var dropdownMenu = document.querySelector('.profile-dropdown-menu');
-        notificationMenu.classList.toggle('show');
-        dropdownMenu.classList.remove('show');
-    });
-
-    // Menambahkan event listener untuk toggle menu sidebar
     document.getElementById('menu-toggle').addEventListener('click', function() {
         var sidebar = document.getElementById('sidebar');
         var dashboard = document.getElementById('dashboard');
