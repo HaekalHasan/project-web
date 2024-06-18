@@ -15,6 +15,18 @@ $sql = "SELECT * FROM users WHERE id='$user_id'";
 $result = $conn->query($sql);
 $user = $result->fetch_assoc();
 
+// Query untuk mendapatkan upcoming events dari tabel schedules
+$sql_events = "SELECT name, nim, dosen1, dosen2, booked_date, status, room, examiners, time
+              FROM schedules
+              WHERE status = 'approved'
+              AND room IS NOT NULL
+              AND examiners IS NOT NULL
+              AND time IS NOT NULL
+              AND student_id = '$user_id'
+              ORDER BY booked_date ASC"; // Misalkan booked_date adalah tanggal event
+
+$result_events = $conn->query($sql_events);
+
 // Memproses form jika ada request POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST['name'];
@@ -116,7 +128,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="dashboard-item">
             <div class="upcoming-events">
                 <h5>Upcoming Events</h5>
-                <p>No upcoming events.</p>
+                <?php
+                if ($result_events->num_rows > 0) {
+                    while ($event = $result_events->fetch_assoc()) {
+                        echo "<p>Name: {$event['name']}<br>";
+                        echo "NIM: {$event['nim']}<br>";
+                        echo "Dosen 1: {$event['dosen1']}<br>";
+                        echo "Dosen 2: {$event['dosen2']}<br>";
+                        echo "Booked Date: {$event['booked_date']}<br>";
+                        echo "Status: {$event['status']}<br>";
+                        echo "Room: {$event['room']}<br>";
+                        echo "Examiners: {$event['examiners']}<br>";
+                        echo "Time: {$event['time']}</p>";
+                    }
+                } else {
+                    echo "<p>No upcoming events.</p>";
+                }
+                ?>
             </div>
             <div id="calendar"></div>
         </div>
