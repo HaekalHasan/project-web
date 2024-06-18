@@ -18,7 +18,7 @@ if (isset($_SESSION['user_id'])) {
 <body class="index">
     <div class="container">
         <h4 id="p">Welcome to the Project Web</h4>
-        <h4 >Please <a href="login.php">Login</a> or <a href="register.php">Register</a> to continue.</h4>
+        <h4 >Please <a href="login.php">Login</a> to continue.</h4>
     </div>
 </body>
 </html>
