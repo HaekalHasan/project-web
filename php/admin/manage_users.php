@@ -11,7 +11,9 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
 $sql = "SELECT * FROM users";
 $users = $conn->query($sql);
 
+
 // Delete user
+
 if (isset($_GET['delete_user_id'])) {
     $user_id = $_GET['delete_user_id'];
 
@@ -20,10 +22,12 @@ if (isset($_GET['delete_user_id'])) {
     if ($conn->query($sql) === TRUE) {
         echo "<script>alert('User berhasil dihapus'); window.location.href='manage_users.php';</script>";
         exit();
+
     } else {
         $error_message = "Error: " . $sql . "<br>" . $conn->error;
     }
 }
+
 
 // Update user
 if (isset($_POST['update_user_id'])) {
@@ -90,6 +94,7 @@ $conn->close();
             <div class="d-flex justify-content-between mb-3">
                 <a href="../../admin_dashboard.php" class="btn btn-secondary">Back to Dashboard</a>
                 <button type="button" class="btn btn-success ms-2" data-bs-toggle="modal" data-bs-target="#addUserModal">Add User</button>
+
             </div>
             <div class="table-responsive">
                 <table class="table table-striped mt-4">
@@ -216,6 +221,7 @@ $conn->close();
             </div>
         </div>
     </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

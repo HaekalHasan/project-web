@@ -18,13 +18,13 @@
 
 <!-- Anggota Tim -->
 ## Anggota Tim
-| NIM           | Name            |
-| ------------- |-----------------|
-| 2210512038    | Haekal Hasan T  |
-| 2210512040    | Septi Bintang A |
-| 2210512041    | Jovan Vian T    |
-| 2210512042    | Ajeng Azzahroh  |
-| 2210512043    | Ahmad Maulana Y |
+| NIM           | Name                     |
+| ------------- |--------------------------|
+| 2210512038    | Haekal Hasan Thanvindra  |
+| 2210512040    | Septi Bintang Anggraeni  |
+| 2210512041    | Jovan Vian Thendra       |
+| 2210512042    | Ajeng Azzahroh           |
+| 2210512043    | Ahmad Maulana Yassin     |
 
 <!-- Latar Belakang -->
 ## Latar Belakang
@@ -54,7 +54,7 @@ Beberapa manfaat yang ada antara lain :
 ## Penjelasan Aplikasi
 
 Program web ini memiliki fitur-fitur antara lain :
-* Registrasi dan Login
+* Login
 * Profil Pengguna
 * Pengambilan Jadwal Sidang
 * Pembatalan dan Modifikasi Jadwal
