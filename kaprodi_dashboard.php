@@ -168,7 +168,7 @@ $user = $result->fetch_assoc();
                 <div class="dashboard-item">
                     <h3>Documents</h3>
                     <p>View documents</p>
-                    <a href="../php/admin/manage_schedule.php" class="btn btn-custom">View Documents</a>
+                    <a href="php/admin/manage_schedule.php" class="btn btn-custom">View Documents</a>
                 </div>
             </div>
         </div>
