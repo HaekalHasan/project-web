@@ -62,19 +62,21 @@ $conn->close();
 </head>
 <body>
     <div class="container my-5">
-        <h1>
+        <h1 class="text-center">
             <span class="fw-normal text-dark">Manage</span> <span class="text-primary">Schedule</span>
         </h1>
-            <hr>
+        <hr>
+
         <?php if (isset($success_message)): ?>
             <div class="alert alert-success text-center"><?php echo $success_message; ?></div>
         <?php endif; ?>
         <?php if (isset($error_message)): ?>
             <div class="alert alert-danger text-center"><?php echo $error_message; ?></div>
         <?php endif; ?>
-        <div class="d-flex justify-content-end mb-3">
-                <a href="../../admin_dashboard.php" class="btn btn-secondary">Back to Dashboard</a>
-            </div>
+
+        <div class="d-flex justify-content-between mb-3">
+            <a href="../../admin_dashboard.php" class="btn btn-secondary">Back to Dashboard</a>
+        </div>
         <div class="row">
             <div class="col-md-6 mx-auto">
                 <form method="POST" action="">

@@ -68,7 +68,13 @@ $conn->close();
 </head>
 <body>
     <div class="container">
-        <h1 class="text-center mb-4">Manage Documents</h1>
+
+        <h1 class="text-center">
+            <span class="fw-normal text-dark">Manage</span> <span class="text-primary">Documents</span>
+        </h1>
+        <div class="d-flex justify-content-between mb-4">
+            <a href="../../admin_dashboard.php" class="btn btn-secondary">Back to Dashboard</a>
+        </div>
         <?php if (isset($error_message)): ?>
             <div class="alert alert-danger text-center"><?php echo $error_message; ?></div>
         <?php endif; ?>
@@ -107,3 +113,4 @@ $conn->close();
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
