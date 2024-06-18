@@ -129,21 +129,20 @@ $user = $result->fetch_assoc();
                     </div>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">No new notifications</a>
-                </div>
             </div>
-            <div class="dropdown">
-                <a href="#" class="text-white dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-user-circle mr-1"></i>
-                    <?php echo $user['name']; ?>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right profile-dropdown-menu" aria-labelledby="navbarDropdown">
-                    <div class="dropdown-item-text">
-                        <strong><?php echo $user['name']; ?></strong><br>
-                        <small><?php echo $user['email']; ?></small>
-                    </div>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+        <div class="dropdown">
+            <a href="#" class="text-white dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-user-circle mr-1"></i>
+                <?php echo $user['name']; ?>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right profile-dropdown-menu" aria-labelledby="navbarDropdown">
+                <div class="dropdown-item-text">
+                    <strong><?php echo $user['name']; ?></strong><br>
+                    <small><?php echo $user['email']; ?></small>
                 </div>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </div>
         </div>
     </div>
@@ -165,7 +164,6 @@ $user = $result->fetch_assoc();
                         <p>View documents</p>
                         <a href="../php/admin/manage_schedule.php" class="btn btn-custom">View Documents</a>
                     </div>
-                </div>
                 <div class="col-md-6">
                     <div class="dashboard-item">
                         <h3>Schedule</h3>

@@ -187,8 +187,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <!-- Sidebar untuk navigasi -->
 <div class="sidebar" id="sidebar">
     <a href="profile.php"><i class="fas fa-home icon"></i> Dashboard</a>
-    <a href="registration.php"><i class="fas fa-user-plus icon"></i> Registration</a>
-    <a href="schedule.php"><i class="fas fa-calendar-alt icon"></i> Schedule</a>
+    <a href="php/schedule.php"><i class="fas fa-calendar-alt icon"></i> Schedule</a>
     <a href="documents.php"><i class="fas fa-file-alt icon"></i> Documents</a>
     <a href="logout.php"><i class="fas fa-sign-out-alt icon"></i> Logout</a>
 </div>
