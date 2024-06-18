@@ -2,38 +2,66 @@
 session_start();
 include 'php/config.php';
 
+// Mengecek apakah pengguna sudah login
 if (isset($_SESSION['user_id'])) {
-    if ($_SESSION['user_role'] == 'admin') {
-        header("Location: admin_dashboard.php");
-    } else {
-        header("Location: profile.php");
+    // Arahkan pengguna ke dashboard yang sesuai berdasarkan peran
+    switch ($_SESSION['user_role']) {
+        case 'admin':
+            header("Location: admin_dashboard.php");
+            break;
+        case 'teacher':
+            header("Location: dosen_dashboard.php");
+            break;
+        case 'kaprodi':
+            header("Location: kaprodi_dashboard.php");
+            break;
+        case 'student':
+            header("Location: profile.php");
+            break;
     }
     exit();
 }
 
+// Memproses login jika form dikirim
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
+    // Query untuk mendapatkan data pengguna berdasarkan email
     $sql = "SELECT * FROM users WHERE email='$email'";
     $result = $conn->query($sql);
 
+    // Mengecek apakah pengguna ditemukan
     if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
+
+        // Verifikasi password
         if (password_verify($password, $user['password'])) {
+            // Set session dengan informasi pengguna
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_role'] = $user['role'];
-            if ($user['role'] == 'admin') {
-                header("Location: admin_dashboard.php");
-            } else {
-                header("Location: profile.php");
+
+            // Arahkan pengguna ke dashboard yang sesuai berdasarkan peran
+            switch ($user['role']) {
+                case 'admin':
+                    header("Location: admin_dashboard.php");
+                    break;
+                case 'teacher':
+                    header("Location: dosen_dashboard.php");
+                    break;
+                case 'kaprodi':
+                    header("Location: kaprodi_dashboard.php");
+                    break;
+                case 'student':
+                    header("Location: profile.php");
+                    break;
             }
             exit();
         } else {
-            $error = "Invalid password";
+            $error = "Password salah";
         }
     } else {
-        $error = "No user found with that email";
+        $error = "Tidak ada pengguna dengan email tersebut";
     }
 }
 ?>
@@ -52,7 +80,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             Password: <input type="password" name="password" required><br>
             <input type="submit" value="Login">
         </form>
-        <h4  id="p">Don't have an account? <a href="register.php">Register here</a></h4>
         <?php
         if (isset($error)) {
             echo "<p class='error'>$error</p>";
@@ -61,4 +88,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 </body>
 </html>
-
