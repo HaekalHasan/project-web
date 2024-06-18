@@ -5,9 +5,15 @@ include 'php/config.php';
 // Mengecek apakah user sudah login dan memiliki peran sebagai admin
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
     // Jika tidak, arahkan ke halaman utama
-    header("Location: index.php");
+    header("Location: login.php");
     exit();
 }
+
+$user_id = $_SESSION['user_id'];
+// Query untuk mendapatkan informasi user berdasarkan user_id
+$sql = "SELECT * FROM users WHERE id='$user_id'";
+$result = $conn->query($sql);
+$user = $result->fetch_assoc();
 ?>
 
 <!DOCTYPE html>
@@ -26,28 +32,26 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
             font-family: Arial, sans-serif;
         }
         .header {
-            background: #007bff;
+            background-color: #007965; 
             color: #fff;
-            padding: 15px;
+            padding: 15px; 
             display: flex;
             justify-content: space-between;
             align-items: center;
+            font-size: 1.2rem;
         }
         .header i {
-            font-size: 1.3rem;
+            font-size: 1.5rem;
         }
         .sidebar {
             height: 100vh;
-            background-color: #343a40;
+            background-color: #00463a;
             padding: 10px;
             position: fixed;
             width: 220px;
             top: 0;
             left: 0;
             transition: width 0.3s;
-        }
-        .sidebar.collapsed {
-            width: 60px;
         }
         .sidebar a {
             color: #fff;
@@ -56,7 +60,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
             text-decoration: none;
         }
         .sidebar a:hover {
-            background-color: #007bff;
+            background-color: #007965;
             color: #fff;
         }
         .sidebar .icon {
@@ -66,9 +70,6 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
             margin-left: 240px;
             padding: 20px;
             transition: margin-left 0.3s;
-        }
-        .dashboard.collapsed {
-            margin-left: 80px;
         }
         .card {
             margin-top: 20px;
@@ -98,6 +99,24 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
         .dropdown.show .notification-dropdown-menu {
             display: block;
         }
+        .dashboard-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .dashboard-item {
+            width: 100%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .dashboard-item h3 {
+            margin-bottom: 15px;
+        }
+        .dashboard-item p {
+            margin-bottom: 0;
+        }
     </style>
 </head>
 <body>
@@ -120,12 +139,12 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
         <div class="dropdown">
             <a href="#" class="text-white dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-user-circle mr-1"></i>
-                Admin
+                <?php echo $user['name']; ?>
             </a>
             <div class="dropdown-menu dropdown-menu-right profile-dropdown-menu" aria-labelledby="navbarDropdown">
                 <div class="dropdown-item-text">
-                    <strong>Admin</strong><br>
-                    <small>admin@example.com</small>
+                    <strong><?php echo $user['name']; ?></strong><br>
+                    <small><?php echo $user['email']; ?></small>
                 </div>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
@@ -143,58 +162,33 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
 </div>
 <!-- Bagian utama dashboard -->
 <div class="dashboard" id="dashboard">
-    <div class="header mb-4">
+<div class="header mb-4">
         <h1>Admin Dashboard</h1>
     </div>
-    <div class="row">
-        <!-- Card untuk Manage Users -->
-        <div class="col-md-4">
-            <div class="card text-white bg-info mb-3">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <h5 class="card-title">Manage Users</h5>
-                            <p class="card-text">View and manage users</p>
-                        </div>
-                        <div>
-                            <i class="fas fa-users fa-2x"></i>
-                        </div>
-                    </div>
-                    <a href="php/admin/manage_users.php" class="btn btn-light mt-3">Manage</a>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Dashboard item untuk manage users -->
+            <div class="col-md-6">
+                <div class="dashboard-item">
+                    <h3>Manage Users</h3>
+                    <p>View and manage users</p>
+                    <a href="php/admin/manage_users.php" class="btn btn-custom">Manage Users</a>
                 </div>
             </div>
-        </div>
-        <!-- Card untuk Manage Schedule -->
-        <div class="col-md-4">
-            <div class="card text-white bg-success mb-3">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <h5 class="card-title">Manage Schedule</h5>
-                            <p class="card-text">View and manage schedule</p>
-                        </div>
-                        <div>
-                            <i class="fas fa-calendar-alt fa-2x"></i>
-                        </div>
-                    </div>
-                    <a href="php/admin/manage_schedule.php" class="btn btn-light mt-3">Manage</a>
+            <!-- Dashboard item untuk manage schedule -->
+            <div class="col-md-6">
+                <div class="dashboard-item">
+                    <h3>Manage Schedule</h3>
+                    <p>View and manage schedule</p>
+                    <a href="php/admin/manage_schedule.php" class="btn btn-custom">Manage Schedule</a>
                 </div>
             </div>
-        </div>
-        <!-- Card untuk Manage Documents -->
-        <div class="col-md-4">
-            <div class="card text-white bg-warning mb-3">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <h5 class="card-title">Manage Documents</h5>
-                            <p class="card-text">View and manage documents</p>
-                        </div>
-                        <div>
-                            <i class="fas fa-file-alt fa-2x"></i>
-                        </div>
-                    </div>
-                    <a href="php/admin/manage_documents.php" class="btn btn-light mt-3">Manage</a>
+            <!-- Dashboard item untuk manage documents -->
+            <div class="col-md-6">
+                <div class="dashboard-item">
+                    <h3>Manage Documents</h3>
+                    <p>View and manage documents</p>
+                    <a href="php/admin/manage_documents.php" class="btn btn-custom">Manage Documents</a>
                 </div>
             </div>
         </div>
@@ -205,17 +199,22 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
-    // Menambahkan event listener untuk toggle dropdown menu profil
+    // Menambahkan event listener untuk menampilkan atau menyembunyikan menu dropdown profil
     document.getElementById('navbarDropdown').addEventListener('click', function() {
         var dropdownMenu = document.querySelector('.profile-dropdown-menu');
+        var notificationMenu = document.querySelector('.notification-dropdown-menu');
         dropdownMenu.classList.toggle('show');
+        notificationMenu.classList.remove('show');
     });
 
-    // Menambahkan event listener untuk toggle dropdown menu notifikasi
+    // Menambahkan event listener untuk menampilkan atau menyembunyikan menu dropdown notifikasi
     document.getElementById('notificationDropdown').addEventListener('click', function() {
-        var dropdownMenu = document.querySelector('.notification-dropdown-menu');
-        dropdownMenu.classList.toggle('show');
+        var notificationMenu = document.querySelector('.notification-dropdown-menu');
+        var dropdownMenu = document.querySelector('.profile-dropdown-menu');
+        notificationMenu.classList.toggle('show');
+        dropdownMenu.classList.remove('show');
     });
+
 
     // Menambahkan event listener untuk toggle menu sidebar
     document.getElementById('menu-toggle').addEventListener('click', function() {
