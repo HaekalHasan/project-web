@@ -38,9 +38,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
-    <!-- Memuat CSS dari Bootstrap dan FontAwesome -->
+    <!-- Memuat CSS dari Bootstrap, FontAwesome, dan FullCalendar -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css">
     <style>
         /* CSS untuk styling halaman */
         body {
@@ -48,28 +49,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-family: Arial, sans-serif;
         }
         .header {
-            background: #007bff;
+            background-color: #007965; 
             color: #fff;
             padding: 15px; 
             display: flex;
             justify-content: space-between;
             align-items: center;
+            font-size: 1.2rem;
         }
         .header i {
-            font-size: 1.3rem; 
+            font-size: 1.5rem;
         }
         .sidebar {
             height: 100vh;
-            background-color: #343a40;
+            background-color: #00463a;
             padding: 10px;
             position: fixed;
             width: 220px;
             top: 0;
             left: 0;
             transition: width 0.3s;
-        }
-        .sidebar.collapsed {
-            width: 60px;
         }
         .sidebar a {
             color: #fff;
@@ -78,7 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             text-decoration: none;
         }
         .sidebar a:hover {
-            background-color: #007bff;
+            background-color: #007965;
             color: #fff;
         }
         .sidebar .icon {
@@ -88,9 +87,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             margin-left: 240px;
             padding: 20px;
             transition: margin-left 0.3s;
-        }
-        .dashboard.collapsed {
-            margin-left: 80px;
         }
         .card {
             margin-top: 20px;
@@ -119,6 +115,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .dropdown.show .profile-dropdown-menu,
         .dropdown.show .notification-dropdown-menu {
             display: block;
+        }
+        .dashboard-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .dashboard-item {
+            width: 65%;
+        }
+        .dashboard-item.profile {
+            width: 32%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        #calendar {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        .upcoming-events {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px; /* Mengatur margin bawah untuk memberikan sela dengan kalender */
+        }
+        .profile-info h5 {
+            margin-bottom: 15px;
+        }
+        .profile-info p {
+            margin: 0;
         }
     </style>
 </head>
@@ -157,71 +184,85 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </div>
 </div>
-    <!-- Sidebar untuk navigasi -->
-    <div class="sidebar" id="sidebar">
-        <a href="profile.php"><i class="fas fa-user icon"></i> Home</a>
-        <a href="schedule.php"><i class="fas fa-calendar-alt icon"></i> Schedule</a>
-        <a href="logout.php"><i class="fas fa-sign-out-alt icon"></i> Logout</a>
+<!-- Sidebar untuk navigasi -->
+<div class="sidebar" id="sidebar">
+    <a href="profile.php"><i class="fas fa-home icon"></i> Dashboard</a>
+    <a href="registration.php"><i class="fas fa-user-plus icon"></i> Registration</a>
+    <a href="schedule.php"><i class="fas fa-calendar-alt icon"></i> Schedule</a>
+    <a href="documents.php"><i class="fas fa-file-alt icon"></i> Documents</a>
+    <a href="logout.php"><i class="fas fa-sign-out-alt icon"></i> Logout</a>
+</div>
+
+<!-- Bagian utama dashboard -->
+<div class="dashboard" id="dashboard">
+    <div class="header mb-4">
+        <h1>Student Dashboard</h1>
     </div>
-    <!-- Bagian utama dashboard -->
-    <div class="dashboard" id="dashboard">
-        <div class="header mb-4">
-            <h1>Dashboard</h1>
-        </div>
-        <!-- Menampilkan pesan jika ada -->
-        <?php if (isset($message)) { echo "<div class='alert alert-info'>$message</div>"; } ?>
-        <div class="card">
-            <div class="card-body">
-                <!-- Form untuk mengupdate profil user -->
-                <form method="POST" action="">
-                    <div class="form-group">
-                        <label for="name">Name:</label>
-                        <input type="text" class="form-control" id="name" name="name" value="<?php echo $user['name']; ?>" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email:</label>
-                        <input type="email" class="form-control" id="email" name="email" value="<?php echo $user['email']; ?>" required>
-                    </div>
-                    <button type="submit" class="btn btn-custom">Update</button>
-                </form>
-            </div>
-        </div>
-        <!-- Bagian untuk menampilkan informasi tambahan -->
-        <div class="row mt-4">
-            <div class="col-md-4">
-                <div class="card text-white bg-info mb-3">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <h5 class="card-title">Schedule</h5>
-                                <p class="card-text">View your schedule</p>
-                            </div>
-                            <div>
-                                <i class="fas fa-calendar-alt fa-2x"></i>
-                            </div>
+    <!-- Menampilkan pesan jika ada -->
+    <?php if (isset($message)) { echo "<div class='alert alert-info'>$message</div>"; } ?>
+    <div class="dashboard-container">
+        <div class="dashboard-item profile">
+            <div class="card">
+                <div class="card-body">
+                    <!-- Form untuk mengupdate profil user -->
+                    <form method="POST" action="">
+                        <div class="form-group">
+                            <label for="name">Name:</label>
+                            <input type="text" class="form-control" id="name" name="name" value="<?php echo $user['name']; ?>" required>
                         </div>
-                        <a href="schedule.php" class="btn btn-light mt-3">View</a>
-                    </div>
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" class="form-control" id="email" name="email" value="<?php echo $user['email']; ?>" required>
+                        </div>
+                        <button type="submit" class="btn btn-custom">Update</button>
+                    </form>
                 </div>
             </div>
         </div>
+        <div class="dashboard-item">
+            <div class="upcoming-events">
+                <h5>Upcoming Events</h5>
+                <p>No upcoming events.</p>
+            </div>
+            <div id="calendar"></div>
+        </div>
     </div>
-    <!-- Memuat JavaScript dari jQuery, Popper.js, dan Bootstrap -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script>
-        // Menambahkan event listener untuk menampilkan atau menyembunyikan menu dropdown profil
-        document.getElementById('navbarDropdown').addEventListener('click', function() {
-            var dropdownMenu = document.querySelector('.profile-dropdown-menu');
-            dropdownMenu.classList.toggle('show');
-        });
+</div>
+<!-- Memuat JavaScript dari jQuery, Popper.js, Bootstrap, dan FullCalendar -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
+<script>
+    // Menambahkan event listener untuk menampilkan atau menyembunyikan menu dropdown profil
+    document.getElementById('navbarDropdown').addEventListener('click', function() {
+        var dropdownMenu = document.querySelector('.profile-dropdown-menu');
+        var notificationMenu = document.querySelector('.notification-dropdown-menu');
+        dropdownMenu.classList.toggle('show');
+        notificationMenu.classList.remove('show');
+    });
 
-        // Menambahkan event listener untuk menampilkan atau menyembunyikan menu dropdown notifikasi
-        document.getElementById('notificationDropdown').addEventListener('click', function() {
-            var dropdownMenu = document.querySelector('.notification-dropdown-menu');
-            dropdownMenu.classList.toggle('show');
+    // Menambahkan event listener untuk menampilkan atau menyembunyikan menu dropdown notifikasi
+    document.getElementById('notificationDropdown').addEventListener('click', function() {
+        var notificationMenu = document.querySelector('.notification-dropdown-menu');
+        var dropdownMenu = document.querySelector('.profile-dropdown-menu');
+        notificationMenu.classList.toggle('show');
+        dropdownMenu.classList.remove('show');
+    });
+
+    // Menginisialisasi FullCalendar
+    $(document).ready(function() {
+        $('#calendar').fullCalendar({
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
+            editable: true,
+            events: []
         });
-    </script>
+    });
+</script>
 </body>
 </html>
