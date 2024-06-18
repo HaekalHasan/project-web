@@ -42,112 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css">
-    <style>
-        /* CSS untuk styling halaman */
-        body {
-            background: #f4f4f4;
-            font-family: Arial, sans-serif;
-        }
-        .header {
-            background-color: #007965; 
-            color: #fff;
-            padding: 15px; 
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 1.2rem;
-        }
-        .header i {
-            font-size: 1.5rem;
-        }
-        .sidebar {
-            height: 100vh;
-            background-color: #00463a;
-            padding: 10px;
-            position: fixed;
-            width: 220px;
-            top: 0;
-            left: 0;
-            transition: width 0.3s;
-        }
-        .sidebar a {
-            color: #fff;
-            display: block;
-            padding: 15px;
-            text-decoration: none;
-        }
-        .sidebar a:hover {
-            background-color: #007965;
-            color: #fff;
-        }
-        .sidebar .icon {
-            margin-right: 10px;
-        }
-        .dashboard {
-            margin-left: 240px;
-            padding: 20px;
-            transition: margin-left 0.3s;
-        }
-        .card {
-            margin-top: 20px;
-        }
-        .btn-custom {
-            background: #007bff;
-            color: #fff;
-        }
-        .btn-custom:hover {
-            background: #0056b3;
-            color: #fff;
-        }
-        .dropdown-menu-right {
-            right: 0;
-            left: auto;
-        }
-        .profile-dropdown-menu,
-        .notification-dropdown-menu {
-            right: 0;
-            left: auto;
-            top: 50px;
-            display: none;
-            position: absolute;
-            z-index: 1000;
-        }
-        .dropdown.show .profile-dropdown-menu,
-        .dropdown.show .notification-dropdown-menu {
-            display: block;
-        }
-        .dashboard-container {
-            display: flex;
-            justify-content: space-between;
-        }
-        .dashboard-item {
-            width: 65%;
-        }
-        .dashboard-item.profile {
-            width: 32%;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        #calendar {
-            max-width: 100%;
-            margin: 0 auto;
-        }
-        .upcoming-events {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px; /* Mengatur margin bawah untuk memberikan sela dengan kalender */
-        }
-        .profile-info h5 {
-            margin-bottom: 15px;
-        }
-        .profile-info p {
-            margin: 0;
-        }
-    </style>
+    <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
 <div class="header">
@@ -186,6 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </div>
 <!-- Sidebar untuk navigasi -->
 <div class="sidebar" id="sidebar">
+    <p><img src="https://www.upnvj.ac.id/id/files/thumb/89f8a80e388ced3704b091e21f510755/520">MAHASISWA</p>
     <a href="profile.php"><i class="fas fa-home icon"></i> Dashboard</a>
     <a href="registration.php"><i class="fas fa-user-plus icon"></i> Registration</a>
     <a href="schedule.php"><i class="fas fa-calendar-alt icon"></i> Schedule</a>
