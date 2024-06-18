@@ -43,6 +43,200 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css">
     <link rel="stylesheet" href="css/dashboard.css">
+    <style>
+        /* CSS untuk styling halaman */
+        body {
+            background: #f4f4f4;
+            font-family: Arial, sans-serif;
+        }
+        .header {
+            background: #4F6F52;
+            color: #fff;
+            padding: 15px; 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header i {
+            font-size: 1.3rem; 
+        }
+        .sidebar {
+            height: 100vh;
+            background-color: #1A4D2E;
+            padding: 10px;
+            position: fixed;
+            width: 240px;
+            top: 0;
+            left: 0;
+            transition: width 0.3s;
+        }
+        .sidebar.collapsed {
+            width: 60px;
+        }
+        .sidebar a {
+            color: #fff;
+            display: block;
+            padding: 15px;
+            text-decoration: none;
+        }
+        .sidebar p {
+            color: #fff;
+            font-size: 1.3rem;
+            display: block;
+            padding: 15px;
+            text-decoration: none;
+        }
+        .sidebar a:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .sidebar .icon {
+            margin-right: 10px;
+        }
+        .sidebar img {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+            margin-left: -5px;
+        }
+        .dashboard {
+            margin-left: 240px;
+            padding: 20px;
+            transition: margin-left 0.3s;
+        }
+        .dashboard.collapsed {
+            margin-left: 80px;
+        }
+        .card {
+            margin-top: 20px;
+        }
+        .btn-custom {
+            background: #007bff;
+            color: #fff;
+        }
+        .btn-custom:hover {
+            background: #0056b3;
+            color: #fff;
+        }
+        .dropdown-menu-right {
+            right: 0;
+            left: auto;
+        }
+        .profile-dropdown-menu,
+        .notification-dropdown-menu {
+            right: 0;
+            left: auto;
+            top: 50px;
+            display: none;
+            position: absolute;
+            z-index: 1000;
+        }
+        .dropdown.show .profile-dropdown-menu,
+        .dropdown.show .notification-dropdown-menu {
+            display: block;
+        }
+        .dashboard-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .dashboard-item {
+            width: 65%;
+            box-sizing: border-box;
+        }
+        .dashboard-item.profile {
+            width: 32%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+        }
+        #calendar {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        .upcoming-events {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px; /* Mengatur margin bawah untuk memberikan sela dengan kalender */
+        }
+        .profile-info h5 {
+            margin-bottom: 15px;
+        }
+        .profile-info p {
+            margin: 0;
+        }
+
+        /* Media Queries untuk membuat halaman responsif */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 60px;
+            }
+            .dashboard {
+                margin-left: 80px;
+            }
+            .dashboard-container {
+                flex-direction: column;
+            }
+            .dashboard-item, .dashboard-item.profile {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+            .sidebar span {
+                display: none;
+            }
+        }
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .sidebar {
+                width: 60px;
+            }
+            .dashboard {
+                margin-left: 60px;
+            }
+            .dashboard-item, .dashboard-item.profile {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+            .sidebar span {
+                display: none;
+            }
+        }
+        @media (max-width: 480px) {
+            .header {
+                padding: 10px;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            .sidebar a, .sidebar p {
+                padding: 10px;
+                font-size: 1rem;
+            }
+            .sidebar.collapsed {
+                width: 100%;
+            }
+            .dashboard {
+                margin-left: 0;
+            }
+            .dashboard-item, .dashboard-item.profile {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+            .sidebar span {
+                display: none;
+            }
+        }
+
+    </style>
 </head>
 <body>
 <div class="header">
@@ -81,12 +275,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </div>
 <!-- Sidebar untuk navigasi -->
 <div class="sidebar" id="sidebar">
-    <p><img src="https://www.upnvj.ac.id/id/files/thumb/89f8a80e388ced3704b091e21f510755/520">MAHASISWA</p>
-    <a href="profile.php"><i class="fas fa-home icon"></i> Dashboard</a>
-    <a href="registration.php"><i class="fas fa-user-plus icon"></i> Registration</a>
-    <a href="schedule.php"><i class="fas fa-calendar-alt icon"></i> Schedule</a>
-    <a href="documents.php"><i class="fas fa-file-alt icon"></i> Documents</a>
-    <a href="logout.php"><i class="fas fa-sign-out-alt icon"></i> Logout</a>
+    <p><img src="https://www.upnvj.ac.id/id/files/thumb/89f8a80e388ced3704b091e21f510755/520"><span> MAHASISWA</span></p>
+    <a href="profile.php"><i class="fas fa-home icon"></i> <span> Dashboard</span></a>
+    <a href="registration.php"><i class="fas fa-user-plus icon"></i><span> Registration</span></a>
+    <a href="schedule.php"><i class="fas fa-calendar-alt icon"></i><span> Schedule</span></a>
+    <a href="documents.php"><i class="fas fa-file-alt icon"></i><span> Documents</span></a>
+    <a href="logout.php"><i class="fas fa-sign-out-alt icon"></i><span> Logout</span></a>
 </div>
 
 <!-- Bagian utama dashboard -->

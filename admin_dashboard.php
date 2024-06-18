@@ -62,12 +62,12 @@ $user = $result->fetch_assoc();
 </div>
 <!-- Sidebar untuk navigasi -->
 <div class="sidebar" id="sidebar">
-    <p><img src="https://www.upnvj.ac.id/id/files/thumb/89f8a80e388ced3704b091e21f510755/520">ADMIN</p>
-    <a href="admin_dashboard.php"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a>
-    <a href="php/admin/manage_users.php"><i class="fas fa-users icon"></i> Manage Users</a>
-    <a href="php/admin/manage_schedule.php"><i class="fas fa-calendar-alt icon"></i> Manage Schedule</a>
-    <a href="php/admin/manage_documents.php"><i class="fas fa-file-alt icon"></i> Manage Documents</a>
-    <a href="logout.php"><i class="fas fa-sign-out-alt icon"></i> Logout</a>
+    <p><img src="https://www.upnvj.ac.id/id/files/thumb/89f8a80e388ced3704b091e21f510755/520"><span> ADMIN</span></p>
+    <a href="admin_dashboard.php"><i class="fas fa-tachometer-alt icon"></i> <span>Dashboard</span></a>
+    <a href="php/admin/manage_users.php"><i class="fas fa-users icon"></i> <span>Manage Users</span></a>
+    <a href="php/admin/manage_schedule.php"><i class="fas fa-calendar-alt icon"></i> <span>Manage Schedule</span></a>
+    <a href="php/admin/manage_documents.php"><i class="fas fa-file-alt icon"></i> <span>Manage Documents</span></a>
+    <a href="logout.php"><i class="fas fa-sign-out-alt icon"></i> <span>Logout</span></a>
 </div>
 <!-- Bagian utama dashboard -->
 <div class="dashboard" id="dashboard">

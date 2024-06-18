@@ -51,6 +51,7 @@ body {
     width: 30px;
     height: 30px;
     margin-right: 10px;
+    margin-left: -5px;
 }
 .dashboard {
     margin-left: 240px;
@@ -91,9 +92,11 @@ body {
 .dashboard-container {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
 }
 .dashboard-item {
     width: 65%;
+    box-sizing: border-box;
 }
 .dashboard-item.profile {
     width: 32%;
@@ -101,6 +104,7 @@ body {
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
 }
 #calendar {
     max-width: 100%;
@@ -118,4 +122,63 @@ body {
 }
 .profile-info p {
     margin: 0;
+}
+
+/* Media Queries untuk membuat halaman responsif */
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 60px;
+    }
+    .dashboard {
+        margin-left: 80px;
+    }
+    .dashboard-container {
+        flex-direction: column;
+    }
+    .dashboard-item, .dashboard-item.profile {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    .sidebar span {
+        display: none;
+    }
+}
+@media (max-width: 768px) {
+    .sidebar {
+        width: 60px;
+    }
+    .dashboard {
+        margin-left: 60px;
+    }
+    .dashboard-item, .dashboard-item.profile {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    .sidebar span {
+        display: none;
+    }
+}
+@media (max-width: 480px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+    .sidebar a, .sidebar p {
+        padding: 10px;
+        font-size: 1rem;
+    }
+    .sidebar.collapsed {
+        width: 100%;
+    }
+    .dashboard {
+        margin-left: 0;
+    }
+    .dashboard-item, .dashboard-item.profile {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    .sidebar span {
+        display: none;
+    }
 }

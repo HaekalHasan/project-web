@@ -62,9 +62,9 @@ $user = $result->fetch_assoc();
 </div>
 <!-- Sidebar untuk navigasi -->
 <div class="sidebar" id="sidebar">
-    <p><img src="https://www.upnvj.ac.id/id/files/thumb/89f8a80e388ced3704b091e21f510755/520">KAPRODI</p>
-    <a href="dosen_dashboard.php"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a>
-    <a href="logout.php"><i class="fas fa-sign-out-alt icon"></i> Logout</a>
+    <p><img src="https://www.upnvj.ac.id/id/files/thumb/89f8a80e388ced3704b091e21f510755/520"><span> DOSEN</span></p>
+    <a href="dosen_dashboard.php"><i class="fas fa-tachometer-alt icon"></i> <span>Dashboard</span></a>
+    <a href="logout.php"><i class="fas fa-sign-out-alt icon"></i> <span>Logout</span></a>
 </div>
 <!-- Bagian utama dashboard -->
 <div class="dashboard" id="dashboard">
