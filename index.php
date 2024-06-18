@@ -4,7 +4,11 @@ include 'php/config.php';
 
 // Jika pengguna sudah login, arahkan mereka ke halaman profil
 if (isset($_SESSION['user_id'])) {
-    header("Location: profile.php");
+    if ($_SESSION['user_role'] == 'admin') {
+        header("Location: admin_dashboard.php");
+    } else {
+        header("Location: profile.php");
+    }
     exit();
 }
 ?>
