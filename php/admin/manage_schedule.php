@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin' && $_SESS
 }
 
 // Query to fetch documents from schedules table
-$sql = "SELECT id, student_id, name, nim, judul_ta, dosen1, dosen2, file_path AS file_name, created_at AS uploaded_at, statuses AS approval FROM schedules";
+$sql = "SELECT id, student_id, name, nim, judul_ta, dosen1, dosen2, file_path AS file_name, created_at AS uploaded_at, status AS approval FROM schedules";
 $schedules = $conn->query($sql);
 $conn->close();
 ?>
