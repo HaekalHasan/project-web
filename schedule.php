@@ -41,10 +41,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $schedule_id = $_POST['schedule_id'];
     
     // Validasi apakah tanggal sudah dibooking
-    $sql = "SELECT * FROM schedules WHERE schedule_id = '$schedule_id'";
-    $result = $conn->query($sql);
+    $sql_check_booking = "SELECT * FROM schedules WHERE schedule_id = '$schedule_id'";
+    $result_check_booking = $conn->query($sql_check_booking);
 
-    if ($result->num_rows > 0) {
+    if ($result_check_booking->num_rows > 0) {
         $message = "Tanggal ini sudah dibooking, pilih tanggal lain.";
     } else {
         // Lanjutkan dengan proses booking seperti sebelumnya
@@ -55,6 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $dosen2 = $_POST['dosen2'];
         $judul_ta = $_POST['judul_ta'];
         $no_hp = $_POST['no_hp'];
+        $booked_date = $_POST['schedule_id']; // Tanggal yang dibooking
 
         // Handle file upload
         $uploadDir = 'uploads/';
@@ -62,8 +63,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadFile)) {
             // Insert into database
-            $sql = "INSERT INTO schedules (student_id, schedule_id, name, nim, dosen1, dosen2, judul_ta, no_hp, file_path) 
-                    VALUES ('$student_id', '$schedule_id', '$name', '$nim', '$dosen1', '$dosen2', '$judul_ta', '$no_hp', '$uploadFile')";
+            $sql = "INSERT INTO schedules (student_id, schedule_id, name, nim, dosen1, dosen2, judul_ta, no_hp, file_path, booked_date) 
+                    VALUES ('$student_id', '$schedule_id', '$name', '$nim', '$dosen1', '$dosen2', '$judul_ta', '$no_hp', '$uploadFile', '$booked_date')";
 
             if ($conn->query($sql) === TRUE) {
                 $message = "Schedule booked successfully";
@@ -75,6 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
+
 
 // Query to fetch available schedules
 $sql = "SELECT * FROM schedules";
