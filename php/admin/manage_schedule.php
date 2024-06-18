@@ -3,13 +3,13 @@ session_start();
 include '../config.php';
 
 // Ensure the user is logged in and has the role of admin
-if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
+if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin' && $_SESSION['user_role'] !== 'kaprodi') {
     header("Location: ../login.php");
     exit();
 }
 
 // Query to fetch documents from schedules table
-$sql = "SELECT id, student_id, name, nim, judul_ta, dosen1, dosen2, file_path AS file_name, created_at AS uploaded_at FROM schedules";
+$sql = "SELECT id, student_id, name, nim, judul_ta, dosen1, dosen2, file_path AS file_name, created_at AS uploaded_at, statuses AS approval FROM schedules";
 $schedules = $conn->query($sql);
 $conn->close();
 ?>

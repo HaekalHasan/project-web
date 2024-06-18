@@ -25,99 +25,7 @@ $user = $result->fetch_assoc();
     <!-- Memuat CSS dari Bootstrap dan FontAwesome untuk styling -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-    <style>
-        /* CSS untuk styling halaman */
-        body {
-            background: #f4f4f4;
-            font-family: Arial, sans-serif;
-        }
-        .header {
-            background-color: #007965; 
-            color: #fff;
-            padding: 15px; 
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 1.2rem;
-        }
-        .header i {
-            font-size: 1.5rem;
-        }
-        .sidebar {
-            height: 100vh;
-            background-color: #00463a;
-            padding: 10px;
-            position: fixed;
-            width: 220px;
-            top: 0;
-            left: 0;
-            transition: width 0.3s;
-        }
-        .sidebar a {
-            color: #fff;
-            display: block;
-            padding: 15px;
-            text-decoration: none;
-        }
-        .sidebar a:hover {
-            background-color: #007965;
-            color: #fff;
-        }
-        .sidebar .icon {
-            margin-right: 10px;
-        }
-        .dashboard {
-            margin-left: 240px;
-            padding: 20px;
-            transition: margin-left 0.3s;
-        }
-        .card {
-            margin-top: 20px;
-        }
-        .btn-custom {
-            background: #007bff;
-            color: #fff;
-        }
-        .btn-custom:hover {
-            background: #0056b3;
-            color: #fff;
-        }
-        .dropdown-menu-right {
-            right: 0;
-            left: auto;
-        }
-        .profile-dropdown-menu,
-        .notification-dropdown-menu {
-            right: 0;
-            left: auto;
-            top: 50px;
-            display: none;
-            position: absolute;
-            z-index: 1000;
-        }
-        .dropdown.show .profile-dropdown-menu,
-        .dropdown.show .notification-dropdown-menu {
-            display: block;
-        }
-        .dashboard-container {
-            display: flex;
-            justify-content: space-between;
-        }
-        .dashboard-item {
-            width: 100%;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-        .dashboard-item h3 {
-            margin-bottom: 15px;
-        }
-        .dashboard-item p {
-            margin-bottom: 0;
-        }
-    </style>
+    <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
 <!-- Header dengan tombol toggle untuk menu sidebar dan dropdown untuk notifikasi serta profil -->
@@ -154,11 +62,12 @@ $user = $result->fetch_assoc();
 </div>
 <!-- Sidebar untuk navigasi -->
 <div class="sidebar" id="sidebar">
-    <a href="admin_dashboard.php"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a>
-    <a href="php/admin/manage_users.php"><i class="fas fa-users icon"></i> Manage Users</a>
-    <a href="php/admin/manage_schedule.php"><i class="fas fa-calendar-alt icon"></i> Manage Schedule</a>
-    <a href="php/admin/manage_documents.php"><i class="fas fa-file-alt icon"></i> Manage Documents</a>
-    <a href="logout.php"><i class="fas fa-sign-out-alt icon"></i> Logout</a>
+    <p><img src="https://www.upnvj.ac.id/id/files/thumb/89f8a80e388ced3704b091e21f510755/520"><span> ADMIN</span></p>
+    <a href="admin_dashboard.php"><i class="fas fa-tachometer-alt icon"></i> <span>Dashboard</span></a>
+    <a href="php/admin/manage_users.php"><i class="fas fa-users icon"></i> <span>Manage Users</span></a>
+    <a href="php/admin/manage_schedule.php"><i class="fas fa-calendar-alt icon"></i> <span>Manage Schedule</span></a>
+    <a href="php/admin/manage_documents.php"><i class="fas fa-file-alt icon"></i> <span>Manage Documents</span></a>
+    <a href="logout.php"><i class="fas fa-sign-out-alt icon"></i> <span>Logout</span></a>
 </div>
 <!-- Bagian utama dashboard -->
 <div class="dashboard" id="dashboard">
@@ -170,25 +79,37 @@ $user = $result->fetch_assoc();
             <!-- Dashboard item untuk manage users -->
             <div class="col-md-6">
                 <div class="dashboard-item">
-                    <h3>Manage Users</h3>
-                    <p>View and manage users</p>
-                    <a href="php/admin/manage_users.php" class="btn btn-custom">Manage Users</a>
+                    <div class="card">
+                        <div class="card-body">
+                            <h3>Manage Users</h3>
+                            <p>View and manage users</p>
+                            <a href="php/admin/manage_users.php" class="btn btn-custom">Manage Users</a>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- Dashboard item untuk manage schedule -->
             <div class="col-md-6">
                 <div class="dashboard-item">
-                    <h3>Manage Schedule</h3>
-                    <p>View and manage schedule</p>
-                    <a href="php/admin/manage_schedule.php" class="btn btn-custom">Manage Schedule</a>
+                    <div class="card">
+                        <div class="card-body">
+                            <h3>Manage Schedule</h3>
+                            <p>View and manage schedule</p>
+                            <a href="php/admin/manage_schedule.php" class="btn btn-custom">Manage Schedule</a>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- Dashboard item untuk manage documents -->
             <div class="col-md-6">
                 <div class="dashboard-item">
-                    <h3>Manage Documents</h3>
-                    <p>View and manage documents</p>
-                    <a href="php/admin/manage_documents.php" class="btn btn-custom">Manage Documents</a>
+                    <div class="card">
+                        <div class="card-body">
+                            <h3>Manage Documents</h3>
+                            <p>View and manage documents</p>
+                            <a href="php/admin/manage_documents.php" class="btn btn-custom">Manage Documents</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

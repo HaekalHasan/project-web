@@ -48,64 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Confirm Submissions</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-    <style>
-        /* CSS styling */
-        body {
-            background: #f4f4f4;
-            font-family: Arial, sans-serif;
-        }
-        .header {
-            background-color: #007965; 
-            color: #fff;
-            padding: 15px; 
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 1.2rem;
-        }
-        .header i {
-            font-size: 1.5rem;
-        }
-        .sidebar {
-            height: 100vh;
-            background-color: #00463a;
-            padding: 10px;
-            position: fixed;
-            width: 220px;
-            top: 0;
-            left: 0;
-            transition: width 0.3s;
-        }
-        .sidebar a {
-            color: #fff;
-            display: block;
-            padding: 15px;
-            text-decoration: none;
-        }
-        .sidebar a:hover {
-            background-color: #007965;
-            color: #fff;
-        }
-        .sidebar .icon {
-            margin-right: 10px;
-        }
-        .dashboard {
-            margin-left: 240px;
-            padding: 20px;
-            transition: margin-left 0.3s;
-        }
-        .card {
-            margin-top: 20px;
-        }
-        .btn-custom {
-            background: #007bff;
-            color: #fff;
-        }
-        .btn-custom:hover {
-            background: #0056b3;
-            color: #fff;
-        }
-    </style>
+    <link rel="stylesheet" href="css/confirm_submissions.css">
 </head>
 <body>
 <div class="header">
@@ -140,9 +83,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 </div>
 <div class="sidebar" id="sidebar">
-    <a href="dosen_dashboard.php"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a>
-    <a href="confirm_submissions.php"><i class="fas fa-check-circle icon"></i> Confirm</a>
-    <a href="logout.php"><i class="fas fa-sign-out-alt icon"></i> Logout</a>
+    <p><img src="https://www.upnvj.ac.id/id/files/thumb/89f8a80e388ced3704b091e21f510755/520"><span> DOSEN</span></p>
+    <a href="dosen_dashboard.php"><i class="fas fa-tachometer-alt icon"></i> <span>Dashboard</span></a>
+    <a href="confirm_submissions.php"><i class="fas fa-check-circle icon"></i> <span>Confirm</span></a>
+    <a href="logout.php"><i class="fas fa-sign-out-alt icon"></i> <span>Logout</span></a>
 </div>
 <div class="dashboard" id="dashboard">
     <div class="container-fluid">
@@ -155,7 +99,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="col-md-4">
                     <div class="card">
                         <div class="card-body">
-
                             <p class="card-text">
                                 <strong>Student           :</strong> <?php echo $submission['name']; ?><br>
                                 <strong>NIM               :</strong> <?php echo $submission['nim']; ?><br>
