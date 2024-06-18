@@ -23,9 +23,9 @@ if (isset($_POST['upload_file'])) {
             $upload_dir = '../uploads/';
 
             if (move_uploaded_file($file_tmp_name, $upload_dir . $new_file_name)) {
-                $sql = "INSERT INTO document (file_name, uploaded_at) VALUES ('$new_file_name', NOW())";
+                $sql = "INSERT INTO documents (file_name, uploaded_at) VALUES ('$new_file_name', NOW())";
                 $conn->query($sql);
-                header("Location: manage_document.php");
+                header("Location: manage_documents.php");
                 exit();
             } else {
                 $error_message = "Failed to upload file!";
@@ -38,7 +38,7 @@ if (isset($_POST['upload_file'])) {
     }
 }
 
-$sql = "SELECT * FROM document";
+$sql = "SELECT * FROM documents";
 $documents = $conn->query($sql);
 $conn->close();
 ?>

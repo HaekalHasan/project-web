@@ -157,7 +157,7 @@ $user = $result->fetch_assoc();
     <a href="admin_dashboard.php"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a>
     <a href="php/admin/manage_users.php"><i class="fas fa-users icon"></i> Manage Users</a>
     <a href="php/admin/manage_schedule.php"><i class="fas fa-calendar-alt icon"></i> Manage Schedule</a>
-    <a href="php/admin/manage_document.php"><i class="fas fa-file-alt icon"></i> Manage Documents</a>
+    <a href="php/admin/manage_documents.php"><i class="fas fa-file-alt icon"></i> Manage Documents</a>
     <a href="logout.php"><i class="fas fa-sign-out-alt icon"></i> Logout</a>
 </div>
 <!-- Bagian utama dashboard -->
@@ -188,7 +188,7 @@ $user = $result->fetch_assoc();
                 <div class="dashboard-item">
                     <h3>Manage Documents</h3>
                     <p>View and manage documents</p>
-                    <a href="php/admin/manage_document.php" class="btn btn-custom">Manage Documents</a>
+                    <a href="php/admin/manage_documents.php" class="btn btn-custom">Manage Documents</a>
                 </div>
             </div>
         </div>
