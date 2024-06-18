@@ -1,3 +1,5 @@
+
+
 <?php
 session_start();
 include '../config.php';
@@ -68,7 +70,6 @@ $conn->close();
 </head>
 <body>
     <div class="container">
-
         <h1 class="text-center">
             <span class="fw-normal text-dark">Manage</span> <span class="text-primary">Documents</span>
         </h1>

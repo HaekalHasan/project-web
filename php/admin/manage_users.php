@@ -46,7 +46,9 @@ if (isset($_POST['update_user_id'])) {
     }
 }
 
+
 // Add user
+
 if (isset($_POST['add_user'])) {
     $name = $_POST['name'];
     $email = $_POST['email'];
@@ -181,7 +183,9 @@ $conn->close();
         </section>
     </div>
 
+
     <!-- Add User Modal -->
+
     <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">

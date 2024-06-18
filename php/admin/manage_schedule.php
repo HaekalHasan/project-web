@@ -42,7 +42,6 @@ $schedules = $conn->query($sql);
 $conn->close();
 ?>
 
-
 <!DOCTYPE html>
 <html>
 <head>
