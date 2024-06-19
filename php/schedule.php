@@ -134,7 +134,7 @@ $schedules = $conn->query($sql);
         <p><img src="https://www.upnvj.ac.id/id/files/thumb/89f8a80e388ced3704b091e21f510755/520"><span> MAHASISWA</span></p>
         <a href="../profile.php"><i class="fas fa-home icon"></i> <span>Dashboard</span></a>
         <a href="schedule.php"><i class="fas fa-calendar-alt icon"></i> <span>Schedule</span></a>
-        <a href="logout.php"><i class="fas fa-sign-out-alt icon"></i> <span>Logout</span></a>
+        <a href="../logout.php"><i class="fas fa-sign-out-alt icon"></i> <span>Logout</span></a>
     </div>
 
     <!-- Bagian utama dashboard -->

@@ -97,11 +97,11 @@ $conn->close();
 <!-- Sidebar untuk navigasi -->
 <div class="sidebar" id="sidebar">
     <p><img src="https://www.upnvj.ac.id/id/files/thumb/89f8a80e388ced3704b091e21f510755/520"><span> ADMIN</span></p>
-    <a href="admin_dashboard.php"><i class="fas fa-tachometer-alt icon"></i> <span>Dashboard</span></a>
+    <a href="../../admin_dashboard.php"><i class="fas fa-tachometer-alt icon"></i> <span>Dashboard</span></a>
     <a href="manage_users.php"><i class="fas fa-users icon"></i> <span>Manage Users</span></a>
     <a href="manage_schedule.php"><i class="fas fa-calendar-alt icon"></i> <span>Manage Schedule</span></a>
     <a href="manage_documents.php"><i class="fas fa-file-alt icon"></i> <span>Manage Documents</span></a>
-    <a href="logout.php"><i class="fas fa-sign-out-alt icon"></i> <span>Logout</span></a>
+    <a href="../../logout.php"><i class="fas fa-sign-out-alt icon"></i> <span>Logout</span></a>
 </div>
 <div class="dashboard" id="dashboard">
     <div class="container">
@@ -146,9 +146,9 @@ $conn->close();
             </table>
         </div>
     </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
