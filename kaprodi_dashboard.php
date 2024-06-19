@@ -77,9 +77,9 @@ $user = $result->fetch_assoc();
                 <div class="dashboard-item">
                     <div class="card">
                         <div class="card-body">
-                            <h3>Documents</h3>
-                            <p>View documents</p>
-                            <a href="php/admin/manage_schedule.php" class="btn btn-custom">View Documents</a>
+                            <h3>Manage</h3>
+                            <p>Manage Schedule</p>
+                            <a href="manage.php" class="btn btn-custom">Manage Schedule</a>
                         </div>
                     </div>
                 </div>
