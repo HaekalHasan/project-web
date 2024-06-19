@@ -145,7 +145,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_schedule'])) {
                                     <strong>Phone:</strong> <?php echo $schedule['no_hp']; ?><br>
                                     <strong>Date:</strong> <?php echo $schedule['booked_date']; ?><br>
                                     <strong>File Title:</strong> <?php echo $schedule['judul_ta']; ?><br>
-                                    <strong>File:</strong> <a href="<?php echo $schedule['file_path']; ?>" target="_blank">Download</a>
+                                    <strong>File:</strong> <a href="<?php echo 'php/uploads/' . basename($schedule['file_path']); ?>" download>Download</a>
                                     <div class="form-group">
                                         <label for="room_<?php echo $schedule['schedule_id']; ?>">Room:</label>
                                         <input type="text" class="form-control" id="room_<?php echo $schedule['schedule_id']; ?>" name="room" value="<?php echo $schedule['room']; ?>" required>
