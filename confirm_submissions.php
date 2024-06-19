@@ -15,7 +15,7 @@ $result = $conn->query($sql);
 $user = $result->fetch_assoc();
 
 // Fetch submissions that are still 'pending' or 'approved'
-$sql_submissions = "SELECT * FROM schedules WHERE status IN ('pending', 'approved')";
+$sql_submissions = "SELECT * FROM schedules WHERE status IN ('pending', 'approved') AND (dosen1 = '{$user['name']}' OR dosen2 = '{$user['name']}')";
 $submissions = $conn->query($sql_submissions);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
