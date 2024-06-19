@@ -14,6 +14,18 @@ $user_id = $_SESSION['user_id'];
 $sql = "SELECT * FROM users WHERE id='$user_id'";
 $result = $conn->query($sql);
 $user = $result->fetch_assoc();
+
+// Query untuk mendapatkan upcoming events dari tabel schedules
+$sql_events = "SELECT name, nim, dosen1, dosen2, booked_date, status, room, examiners, time
+              FROM schedules
+              WHERE status = 'approved'
+              AND room IS NOT NULL
+              AND examiners IS NOT NULL
+              AND time IS NOT NULL
+              AND (dosen1 = '{$user['name']}' OR dosen2 = '{$user['name']}')
+              ORDER BY booked_date ASC"; // Misalkan booked_date adalah tanggal event
+
+$result_events = $conn->query($sql_events);
 ?>
 
 <!DOCTYPE html>
@@ -75,6 +87,26 @@ $user = $result->fetch_assoc();
     <!-- Bagian container-fluid masih kosong -->
     <div class="container-fluid">
         <!-- Content khusus dosen bisa ditambahkan di sini -->
+        <div class="upcoming-events">
+                <h5>Upcoming Events</h5>
+                <?php
+                if ($result_events->num_rows > 0) {
+                    while ($event = $result_events->fetch_assoc()) {
+                        echo "<p>Name: {$event['name']}<br>";
+                        echo "NIM: {$event['nim']}<br>";
+                        echo "Dosen 1: {$event['dosen1']}<br>";
+                        echo "Dosen 2: {$event['dosen2']}<br>";
+                        echo "Booked Date: {$event['booked_date']}<br>";
+                        echo "Status: {$event['status']}<br>";
+                        echo "Room: {$event['room']}<br>";
+                        echo "Examiners: {$event['examiners']}<br>";
+                        echo "Time: {$event['time']}</p>";
+                    }
+                } else {
+                    echo "<p>No upcoming events.</p>";
+                }
+                ?>
+            </div>
     </div>
 </div>
 <!-- Memuat JavaScript dari jQuery, Popper.js, dan Bootstrap -->
