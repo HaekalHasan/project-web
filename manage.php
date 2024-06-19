@@ -138,6 +138,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_schedule'])) {
                             <?php if ($schedule['status'] === 'approved'): ?>
                                 <form method="POST">
                                     <input type="hidden" name="schedule_id" value="<?php echo $schedule['schedule_id']; ?>">
+                                    <strong>Student:</strong> <?php echo $schedule['name']; ?><br>
+                                    <strong>NIM:</strong> <?php echo $schedule['nim']; ?><br>
+                                    <strong>Dosen Pembimbing 1:</strong> <?php echo $schedule['dosen1']; ?><br>
+                                    <strong>Dosen Pembimbing 2:</strong> <?php echo $schedule['dosen2']; ?><br>
+                                    <strong>Phone:</strong> <?php echo $schedule['no_hp']; ?><br>
+                                    <strong>Date:</strong> <?php echo $schedule['booked_date']; ?><br>
+                                    <strong>File Title:</strong> <?php echo $schedule['judul_ta']; ?><br>
+                                    <strong>File:</strong> <a href="<?php echo $schedule['file_path']; ?>" target="_blank">Download</a>
                                     <div class="form-group">
                                         <label for="room_<?php echo $schedule['schedule_id']; ?>">Room:</label>
                                         <input type="text" class="form-control" id="room_<?php echo $schedule['schedule_id']; ?>" name="room" value="<?php echo $schedule['room']; ?>" required>
@@ -160,6 +168,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_schedule'])) {
                 </div>
             <?php endwhile; ?>
         </div>
+
     </div>
 
 </div>
