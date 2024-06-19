@@ -168,6 +168,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_schedule'])) {
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
+    // Menambahkan event listener untuk menampilkan atau menyembunyikan menu dropdown profil
+    document.getElementById('navbarDropdown').addEventListener('click', function() {
+        var dropdownMenu = document.querySelector('.profile-dropdown-menu');
+        var notificationMenu = document.querySelector('.notification-dropdown-menu');
+        dropdownMenu.classList.toggle('show');
+        notificationMenu.classList.remove('show');
+    });
+
+    // Menambahkan event listener untuk menampilkan atau menyembunyikan menu dropdown notifikasi
+    document.getElementById('notificationDropdown').addEventListener('click', function() {
+        var notificationMenu = document.querySelector('.notification-dropdown-menu');
+        var dropdownMenu = document.querySelector('.profile-dropdown-menu');
+        notificationMenu.classList.toggle('show');
+        dropdownMenu.classList.remove('show');
+    });
+
+    // Menambahkan event listener untuk toggle menu sidebar
     document.getElementById('menu-toggle').addEventListener('click', function() {
         var sidebar = document.getElementById('sidebar');
         var dashboard = document.getElementById('dashboard');
@@ -175,7 +192,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_schedule'])) {
         dashboard.classList.toggle('collapsed');
     });
 </script>
-
 </body>
 </html>
 
