@@ -52,37 +52,54 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif ($schedule_id < $current_date) {
         $message = "You cannot select a past date.";
     } else {
-        // Lanjutkan dengan proses booking seperti sebelumnya
-        $student_id = $_SESSION['user_id'];
-        $name = $_POST['name'];
-        $nim = $_POST['nim'];
+        // Validasi dosen pembimbing 1 dan 2 tidak boleh sama
         $dosen1 = $_POST['dosen1'];
         $dosen2 = $_POST['dosen2'];
-        $judul_ta = $_POST['judul_ta'];
-        $no_hp = $_POST['no_hp'];
-        $booked_date = $_POST['schedule_id']; // Tanggal yang dibooking
 
-        // Handle file upload
-        $uploadDir = 'uploads/';
-        $uploadFile = $uploadDir . basename($_FILES['file']['name']);
-
-        if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadFile)) {
-            // Insert into database
-            $sql = "INSERT INTO schedules (student_id, schedule_id, name, nim, dosen1, dosen2, judul_ta, no_hp, file_path, booked_date) 
-                    VALUES ('$student_id', '$schedule_id', '$name', '$nim', '$dosen1', '$dosen2', '$judul_ta', '$no_hp', '$uploadFile', '$booked_date')";
-
-            if ($conn->query($sql) === TRUE) {
-                $message = "Schedule booked successfully";
-                // Tambahkan tanggal baru ke array bookedSchedules
-                $bookedSchedules[] = $booked_date;
-                // Mengosongkan form setelah booking berhasil
-                $_POST = array(); // Mengosongkan $_POST
-            } else {
-                $message = "Error: " . $sql . "<br>" . $conn->error;
-            }
+        if ($dosen1 == $dosen2) {
+            $message = "Dosen Pembimbing 1 and Dosen Pembimbing 2 cannot be the same.";
         } else {
-            $message = "Error uploading file.";
+            // Lanjutkan dengan proses booking seperti sebelumnya
+            $student_id = $_SESSION['user_id'];
+            $name = $_POST['name'];
+            $nim = $_POST['nim'];
+            $judul_ta = $_POST['judul_ta'];
+            $no_hp = $_POST['no_hp'];
+            $booked_date = $_POST['schedule_id']; // Tanggal yang dibooking
+
+            // Handle file upload
+            $uploadDir = 'uploads/';
+            $uploadFile = $uploadDir . basename($_FILES['file']['name']);
+
+            if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadFile)) {
+                // Insert into database
+                $sql = "INSERT INTO schedules (student_id, schedule_id, name, nim, dosen1, dosen2, judul_ta, no_hp, file_path, booked_date) 
+                        VALUES ('$student_id', '$schedule_id', '$name', '$nim', '$dosen1', '$dosen2', '$judul_ta', '$no_hp', '$uploadFile', '$booked_date')";
+
+                if ($conn->query($sql) === TRUE) {
+                    $message = "Schedule booked successfully";
+                    // Tambahkan tanggal baru ke array bookedSchedules
+                    $bookedSchedules[] = $booked_date;
+                    // Mengosongkan form setelah booking berhasil
+                    $_POST = array(); // Mengosongkan $_POST
+                } else {
+                    $message = "Error: " . $sql . "<br>" . $conn->error;
+                }
+            } else {
+                $message = "Error uploading file.";
+            }
         }
+    }
+}
+
+// Query untuk mengambil daftar dosen pembimbing dengan peran 'teacher'
+$sql_dosen = "SELECT * FROM users WHERE role = 'teacher'";
+$result_dosen = $conn->query($sql_dosen);
+
+$dosenPembimbing = [];
+if ($result_dosen->num_rows > 0) {
+    while ($row = $result_dosen->fetch_assoc()) {
+        $dosenPembimbing[] = $row;
     }
 }
 
@@ -155,8 +172,22 @@ $schedules = $conn->query($sql);
             <form id="bookingForm" method="POST" action="" enctype="multipart/form-data">
                 <input type="text" name="name" placeholder="Nama Mahasiswa" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>" required>
                 <input type="text" name="nim" placeholder="NIM" value="<?php echo isset($_POST['nim']) ? htmlspecialchars($_POST['nim']) : ''; ?>" required>
-                <input type="text" name="dosen1" placeholder="Dosen Pembimbing 1" value="<?php echo isset($_POST['dosen1']) ? htmlspecialchars($_POST['dosen1']) : ''; ?>" required>
-                <input type="text" name="dosen2" placeholder="Dosen Pembimbing 2" value="<?php echo isset($_POST['dosen2']) ? htmlspecialchars($_POST['dosen2']) : ''; ?>" required>
+                <!-- Select dropdown for lecturers -->
+                <label for="dosen1">Dosen Pembimbing 1:</label><br>
+                <select name="dosen1" id="dosen1" required>
+                    <option value="" disabled selected>Pilih Dosen</option>
+                    <?php foreach ($dosenPembimbing as $dosen): ?>
+                        <option value="<?php echo $dosen['name']; ?>"><?php echo $dosen['name']; ?></option>
+                    <?php endforeach; ?>
+                </select><br>
+
+                <label for="dosen2">Dosen Pembimbing 2:</label><br>
+                <select name="dosen2" id="dosen2" required>
+                    <option value="" disabled selected>Pilih Dosen</option>
+                    <?php foreach ($dosenPembimbing as $dosen): ?>
+                        <option value="<?php echo $dosen['name']; ?>"><?php echo $dosen['name']; ?></option>
+                    <?php endforeach; ?>
+                </select><br>
                 <input type="text" name="judul_ta" placeholder="Judul Tugas Akhir" value="<?php echo isset($_POST['judul_ta']) ? htmlspecialchars($_POST['judul_ta']) : ''; ?>" required>
                 <input type="tel" name="no_hp" placeholder="No. HP" value="<?php echo isset($_POST['no_hp']) ? htmlspecialchars($_POST['no_hp']) : ''; ?>" required>
                 <label for="file">Upload File:</label>
@@ -210,6 +241,17 @@ $schedules = $conn->query($sql);
                     $('#schedule_id').val(selectedDate);
                     $('.fc-day').removeClass('selected-day');
                     $(this).addClass('selected-day');
+                }
+            });
+
+            // Validasi klien untuk memastikan dosen1 dan dosen2 tidak sama sebelum mengirimkan formulir
+            $('#bookingForm').submit(function(event) {
+                var dosen1 = $('#dosen1').val();
+                var dosen2 = $('#dosen2').val();
+
+                if (dosen1 === dosen2) {
+                    alert("Dosen Pembimbing 1 and Dosen Pembimbing 2 cannot be the same.");
+                    event.preventDefault(); // Mencegah pengiriman formulir jika validasi gagal
                 }
             });
 
