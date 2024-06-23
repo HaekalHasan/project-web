@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result_check_booking = $conn->query($sql_check_booking);
 
     if ($result_check_booking->num_rows > 0) {
-        $message = "Tanggal ini sudah dibooking, pilih tanggal lain.";
+        $message = "This date has already been booked, please choose another date.";
     } elseif ($schedule_id < $current_date) {
         $message = "You cannot select a past date.";
     } else {
