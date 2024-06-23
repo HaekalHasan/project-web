@@ -41,27 +41,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 } else {
                     $_SESSION['message'] = "Error updating record: " . $conn->error;
                 }
-            } elseif ($user['name'] === $submission['dosen2'] && $submission['status'] === 'approved') {
-                // Dosen Pembimbing 2 can approve only if Dosen Pembimbing 1 has already approved
-                $sql_update = "UPDATE schedules SET status='completed' WHERE schedule_id='$schedule_id'";
-                $status_message = "Status completed successfully by Dosen Pembimbing 2.";
+            } elseif ($user['name'] === $submission['dosen2']) {
+                // Dosen Pembimbing 2 can approve if the submission status is already 'approved'
+                if ($submission['status'] === 'approved') {
+                    $sql_update = "UPDATE schedules SET status='completed' WHERE schedule_id='$schedule_id'";
+                    $status_message = "Status completed successfully by Dosen Pembimbing 2.";
 
-                if ($conn->query($sql_update) === TRUE) {
-                    $_SESSION['message'] = $status_message;
+                    if ($conn->query($sql_update) === TRUE) {
+                        $_SESSION['message'] = $status_message;
 
-                    // Check if both supervisors have approved
-                    $check_approval_sql = "SELECT * FROM schedules WHERE schedule_id='$schedule_id' AND status='completed'";
-                    $check_approval_result = $conn->query($check_approval_sql);
+                        // Check if both supervisors have approved
+                        $check_approval_sql = "SELECT * FROM schedules WHERE schedule_id='$schedule_id' AND status='completed'";
+                        $check_approval_result = $conn->query($check_approval_sql);
 
-                    if ($check_approval_result->num_rows > 0) {
-                        // Redirect to manage.php if both supervisors have approved
-                        header("Location: manage.php");
-                        exit();
+                        if ($check_approval_result->num_rows > 0) {
+                            // Redirect to manage.php if both supervisors have approved
+                            header("Location: manage.php");
+                            exit();
+                        } else {
+                            $_SESSION['message'] = "Dosen Pembimbing 1 has approved. Waiting for Dosen Pembimbing 2.";
+                        }
                     } else {
-                        $_SESSION['message'] = "Dosen Pembimbing 1 has approved. Waiting for Dosen Pembimbing 2.";
+                        $_SESSION['message'] = "Error updating record: " . $conn->error;
                     }
                 } else {
-                    $_SESSION['message'] = "Error updating record: " . $conn->error;
+                    $_SESSION['message'] = "Dosen Pembimbing 1 has not yet approved this submission.";
                 }
             } else {
                 $_SESSION['message'] = "You are not authorized to approve this submission.";
@@ -147,6 +151,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <strong>File              :</strong> <a href="<?php echo 'php/uploads/' . basename($submission['file_path']); ?>" download>Download</a>
                             </p>
                             <?php if ($submission['status'] === 'pending'): ?>
+                                <form method="POST" action="">
+                                    <input type="hidden" name="schedule_id" value="<?php echo $submission['schedule_id']; ?>">
+                                    <button type="submit" name="action" value="approve" class="btn btn-success">Approve</button>
+                                </form>
+                            <?php elseif ($submission['status'] === 'approved' && $user['name'] === $submission['dosen2']): ?>
                                 <form method="POST" action="">
                                     <input type="hidden" name="schedule_id" value="<?php echo $submission['schedule_id']; ?>">
                                     <button type="submit" name="action" value="approve" class="btn btn-success">Approve</button>
