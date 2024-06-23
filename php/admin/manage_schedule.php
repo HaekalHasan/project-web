@@ -57,7 +57,7 @@ $conn->close();
                     <small><?php echo $user['email']; ?></small>
                 </div>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                <a class="dropdown-item" href="../../logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </div>
         </div>
     </div>
