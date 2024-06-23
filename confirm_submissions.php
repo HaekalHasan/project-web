@@ -24,13 +24,50 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Validate and process approval
     if ($action === 'approve') {
-        $sql_update = "UPDATE schedules SET status='approved' WHERE schedule_id='$schedule_id'";
-        $status_message = "Status approved successfully.";
-        
-        if ($conn->query($sql_update) === TRUE) {
-            $_SESSION['message'] = $status_message;
+        // Fetch the submission first
+        $fetch_submission_sql = "SELECT * FROM schedules WHERE schedule_id='$schedule_id'";
+        $fetch_submission_result = $conn->query($fetch_submission_sql);
+        if ($fetch_submission_result->num_rows > 0) {
+            $submission = $fetch_submission_result->fetch_assoc();
+            
+            // Check if the current user is Dosen Pembimbing 1 or Dosen Pembimbing 2
+            if ($user['name'] === $submission['dosen1']) {
+                // Dosen Pembimbing 1 approves
+                $sql_update = "UPDATE schedules SET status='approved' WHERE schedule_id='$schedule_id'";
+                $status_message = "Status approved successfully by Dosen Pembimbing 1.";
+
+                if ($conn->query($sql_update) === TRUE) {
+                    $_SESSION['message'] = $status_message;
+                } else {
+                    $_SESSION['message'] = "Error updating record: " . $conn->error;
+                }
+            } elseif ($user['name'] === $submission['dosen2'] && $submission['status'] === 'approved') {
+                // Dosen Pembimbing 2 can approve only if Dosen Pembimbing 1 has already approved
+                $sql_update = "UPDATE schedules SET status='completed' WHERE schedule_id='$schedule_id'";
+                $status_message = "Status completed successfully by Dosen Pembimbing 2.";
+
+                if ($conn->query($sql_update) === TRUE) {
+                    $_SESSION['message'] = $status_message;
+
+                    // Check if both supervisors have approved
+                    $check_approval_sql = "SELECT * FROM schedules WHERE schedule_id='$schedule_id' AND status='completed'";
+                    $check_approval_result = $conn->query($check_approval_sql);
+
+                    if ($check_approval_result->num_rows > 0) {
+                        // Redirect to manage.php if both supervisors have approved
+                        header("Location: manage.php");
+                        exit();
+                    } else {
+                        $_SESSION['message'] = "Dosen Pembimbing 1 has approved. Waiting for Dosen Pembimbing 2.";
+                    }
+                } else {
+                    $_SESSION['message'] = "Error updating record: " . $conn->error;
+                }
+            } else {
+                $_SESSION['message'] = "You are not authorized to approve this submission.";
+            }
         } else {
-            $_SESSION['message'] = "Error updating record: " . $conn->error;
+            $_SESSION['message'] = "Submission not found.";
         }
     }
 
