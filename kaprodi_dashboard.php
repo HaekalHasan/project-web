@@ -58,7 +58,7 @@ $user = $result->fetch_assoc();
 </div>
 <!-- Sidebar untuk navigasi -->
 <div class="sidebar" id="sidebar">
-    <p><img src="https://www.upnvj.ac.id/id/files/thumb/89f8a80e388ced3704b091e21f510755/520"><span> DOSEN</span></p>
+    <p><img src="https://www.upnvj.ac.id/id/files/thumb/89f8a80e388ced3704b091e21f510755/520"><span> KAPRODI</span></p>
     <a href="kaprodi_dashboard.php"><i class="fas fa-tachometer-alt icon"></i> <span>Dashboard</span></a>
     <a href="manage.php"><i class="fas fa-file-alt icon"></i> <span>Manage</span></a>
     <a href="logout.php"><i class="fas fa-sign-out-alt icon"></i> <span>Logout</span></a>
