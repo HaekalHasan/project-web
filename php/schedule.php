@@ -24,8 +24,11 @@ if ($userResult->num_rows > 0) {
     exit();
 }
 
-// Query untuk mengambil semua jadwal yang sudah dipesan
-$sql = "SELECT schedule_id FROM schedules";
+// Ambil tanggal saat ini
+$current_date = date('Y-m-d');
+
+// Query untuk mengambil semua jadwal yang sudah dipesan dan belum terlewat
+$sql = "SELECT schedule_id FROM schedules WHERE schedule_id >= '$current_date'";
 $result = $conn->query($sql);
 
 $bookedSchedules = [];
@@ -45,7 +48,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result_check_booking = $conn->query($sql_check_booking);
 
     if ($result_check_booking->num_rows > 0) {
-        $message = "Tanggal ini sudah dibooking, pilih tanggal lain.";
+        $message = "This date has already been booked, please choose another date.";
+    } elseif ($schedule_id < $current_date) {
+        $message = "You cannot select a past date.";
     } else {
         // Lanjutkan dengan proses booking seperti sebelumnya
         $student_id = $_SESSION['user_id'];
@@ -81,8 +86,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// Query to fetch available schedules
-$sql = "SELECT * FROM schedules";
+// Query to fetch available schedules (schedules that are not booked and not yet passed)
+$sql = "SELECT * FROM schedules WHERE schedule_id >= '$current_date'";
 $schedules = $conn->query($sql);
 ?>
 
@@ -164,28 +169,13 @@ $schedules = $conn->query($sql);
         </div>
     </div>
 
+    <!-- JavaScript -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
     <script>
-        // Menambahkan event listener untuk menampilkan atau menyembunyikan menu dropdown profil
-        document.getElementById('navbarDropdown').addEventListener('click', function() {
-            var dropdownMenu = document.querySelector('.profile-dropdown-menu');
-            var notificationMenu = document.querySelector('.notification-dropdown-menu');
-            dropdownMenu.classList.toggle('show');
-            notificationMenu.classList.remove('show');
-        });
-
-        // Menambahkan event listener untuk menampilkan atau menyembunyikan menu dropdown notifikasi
-        document.getElementById('notificationDropdown').addEventListener('click', function() {
-            var notificationMenu = document.querySelector('.notification-dropdown-menu');
-            var dropdownMenu = document.querySelector('.profile-dropdown-menu');
-            notificationMenu.classList.toggle('show');
-            dropdownMenu.classList.remove('show');
-        });
-
         $(document).ready(function() {
             var bookedSchedules = <?php echo json_encode($bookedSchedules); ?>;
 
@@ -207,8 +197,13 @@ $schedules = $conn->query($sql);
                 dayClick: function(date, jsEvent, view) {
                     var selectedDate = date.format();
 
+                    if (date.isBefore(moment(), 'day')) {
+                        alert("You cannot select a past date.");
+                        return;
+                    }
+
                     if (bookedSchedules.includes(selectedDate)) {
-                        alert("Tanggal ini sudah dibooking, pilih tanggal lain.");
+                        alert("This date has already been booked, please choose another date.");
                         return;
                     }
 
