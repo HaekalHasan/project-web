@@ -21,15 +21,19 @@ if ($result) {
     exit();
 }
 
-// Query untuk mendapatkan upcoming events dari tabel schedules
+// Ambil name dari user
+$name = $user['name'];
+
+// Query untuk mendapatkan upcoming events dengan filter berdasarkan name user
 $sql_events = "SELECT name, nim, dosen1, dosen2, booked_date, status, room, examiners, time
               FROM schedules
               WHERE status = 'approved'
               AND room IS NOT NULL
               AND examiners IS NOT NULL
               AND time IS NOT NULL
-              AND student_id = '$user_id'
+              AND name = '$name'  -- Membandingkan dengan name dari user
               ORDER BY booked_date ASC";
+
 
 $result_events = $conn->query($sql_events);
 
