@@ -19,7 +19,7 @@ $userResult = $conn->query($userSql);
 if ($userResult->num_rows > 0) {
     $user = $userResult->fetch_assoc(); // Mengambil data pengguna dari hasil query
 } else {
-    // Jika pengguna tidak ditemukan, lakukan sesuatu, misalnya kembalikan ke halaman login
+    // Jika pengguna tidak ditemukan, kembalikan ke halaman login
     header("Location: login.php");
     exit();
 }
@@ -30,7 +30,7 @@ $result = $conn->query($sql);
 
 $bookedSchedules = [];
 if ($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
+    while ($row = $result->fetch_assoc()) {
         $bookedSchedules[] = $row['schedule_id'];
     }
 }
@@ -39,7 +39,7 @@ $message = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $schedule_id = $_POST['schedule_id'];
-    
+
     // Validasi apakah tanggal sudah dibooking
     $sql_check_booking = "SELECT * FROM schedules WHERE schedule_id = '$schedule_id'";
     $result_check_booking = $conn->query($sql_check_booking);
@@ -68,6 +68,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($conn->query($sql) === TRUE) {
                 $message = "Schedule booked successfully";
+                // Tambahkan tanggal baru ke array bookedSchedules
+                $bookedSchedules[] = $booked_date;
+                // Mengosongkan form setelah booking berhasil
+                $_POST = array(); // Mengosongkan $_POST
             } else {
                 $message = "Error: " . $sql . "<br>" . $conn->error;
             }
@@ -76,7 +80,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
-
 
 // Query to fetch available schedules
 $sql = "SELECT * FROM schedules";
@@ -124,7 +127,7 @@ $schedules = $conn->query($sql);
                         <small><?php echo $user['email']; ?></small>
                     </div>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    <a class="dropdown-item" href="../logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
                 </div>
             </div>
         </div>
@@ -144,25 +147,25 @@ $schedules = $conn->query($sql);
             <?php if (!empty($message)): ?>
                 <div class="alert alert-info"><?php echo $message; ?></div>
             <?php endif; ?>
-            <form method="POST" action="" enctype="multipart/form-data">
-                <input type="text" name="name" placeholder="Nama Mahasiswa" required>
-                <input type="text" name="nim" placeholder="NIM" required>
-                <input type="text" name="dosen1" placeholder="Dosen Pembimbing 1" required>
-                <input type="text" name="dosen2" placeholder="Dosen Pembimbing 2" required>
-                <input type="text" name="judul_ta" placeholder="Judul Tugas Akhir" required>
-                <input type="tel" name="no_hp" placeholder="No. HP" required>
+            <form id="bookingForm" method="POST" action="" enctype="multipart/form-data">
+                <input type="text" name="name" placeholder="Nama Mahasiswa" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>" required>
+                <input type="text" name="nim" placeholder="NIM" value="<?php echo isset($_POST['nim']) ? htmlspecialchars($_POST['nim']) : ''; ?>" required>
+                <input type="text" name="dosen1" placeholder="Dosen Pembimbing 1" value="<?php echo isset($_POST['dosen1']) ? htmlspecialchars($_POST['dosen1']) : ''; ?>" required>
+                <input type="text" name="dosen2" placeholder="Dosen Pembimbing 2" value="<?php echo isset($_POST['dosen2']) ? htmlspecialchars($_POST['dosen2']) : ''; ?>" required>
+                <input type="text" name="judul_ta" placeholder="Judul Tugas Akhir" value="<?php echo isset($_POST['judul_ta']) ? htmlspecialchars($_POST['judul_ta']) : ''; ?>" required>
+                <input type="tel" name="no_hp" placeholder="No. HP" value="<?php echo isset($_POST['no_hp']) ? htmlspecialchars($_POST['no_hp']) : ''; ?>" required>
                 <label for="file">Upload File:</label>
                 <input type="file" name="file" required>
                 <label for="schedule_date">Pilih Jadwal Sidang:</label>
                 <div id="calendar"></div>
-                <input type="hidden" id="schedule_id" name="schedule_id">
+                <input type="hidden" id="schedule_id" name="schedule_id" value="<?php echo isset($_POST['schedule_id']) ? $_POST['schedule_id'] : ''; ?>">
                 <input type="submit" value="Book Schedule">
             </form>
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
@@ -185,14 +188,14 @@ $schedules = $conn->query($sql);
 
         $(document).ready(function() {
             var bookedSchedules = <?php echo json_encode($bookedSchedules); ?>;
-            
+
             $('#calendar').fullCalendar({
                 header: {
-               left: 'prev,next today',
+                    left: 'prev,next today',
                     center: 'title',
                     right: 'month,agendaWeek,agendaDay'
                 },
-                editable: false,  // Jadikan tidak bisa diedit jika perlu
+                editable: false,
                 events: bookedSchedules.map(function(schedule) {
                     return {
                         start: schedule,
@@ -203,19 +206,31 @@ $schedules = $conn->query($sql);
                 }),
                 dayClick: function(date, jsEvent, view) {
                     var selectedDate = date.format();
-                    
+
                     if (bookedSchedules.includes(selectedDate)) {
                         alert("Tanggal ini sudah dibooking, pilih tanggal lain.");
                         return;
                     }
 
-                    // Menyimpan ID jadwal yang dipilih ke dalam input tersembunyi
                     $('#schedule_id').val(selectedDate);
-                    // Menandai tanggal yang dipilih untuk memberikan umpan balik visual kepada pengguna
                     $('.fc-day').removeClass('selected-day');
                     $(this).addClass('selected-day');
                 }
             });
+
+            // Mengosongkan form setelah refresh halaman jika booking berhasil
+            <?php if (!empty($message) && strpos($message, 'Schedule booked successfully') !== false): ?>
+                $('#bookingForm')[0].reset(); // Reset form
+                $('#schedule_id').val(''); // Reset hidden field
+                // Tambahkan tanggal baru ke kalender
+                var newEvent = {
+                    start: '<?php echo $booked_date; ?>',
+                    end: '<?php echo $booked_date; ?>',
+                    rendering: 'background',
+                    color: '#ff9f89'
+                };
+                $('#calendar').fullCalendar('renderEvent', newEvent);
+            <?php endif; ?>
         });
     </script>
 </body>

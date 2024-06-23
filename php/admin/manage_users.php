@@ -8,26 +8,21 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
 }
 
 // Fetch users
-$sql = "SELECT * FROM users";
+$sql = "SELECT * FROM users WHERE role != 'admin'";
 $users = $conn->query($sql);
 
-
 // Delete user
-
 if (isset($_GET['delete_user_id'])) {
     $user_id = $_GET['delete_user_id'];
 
     $sql = "DELETE FROM users WHERE id = '$user_id'";
-
     if ($conn->query($sql) === TRUE) {
         echo "<script>alert('User berhasil dihapus'); window.location.href='manage_users.php';</script>";
         exit();
-
     } else {
         $error_message = "Error: " . $sql . "<br>" . $conn->error;
     }
 }
-
 
 // Update user
 if (isset($_POST['update_user_id'])) {
@@ -37,7 +32,6 @@ if (isset($_POST['update_user_id'])) {
     $role = $_POST['role'];
 
     $sql = "UPDATE users SET name = '$name', email = '$email', role = '$role' WHERE id = '$user_id'";
-
     if ($conn->query($sql) === TRUE) {
         echo "<script>alert('User berhasil diupdate'); window.location.href='manage_users.php';</script>";
         exit();
@@ -46,30 +40,19 @@ if (isset($_POST['update_user_id'])) {
     }
 }
 
-
 // Add user
-
 if (isset($_POST['add_user'])) {
     $name = $_POST['name'];
     $email = $_POST['email'];
     $role = $_POST['role'];
     $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
 
-    // Check if email already exists
-    $check_email_sql = "SELECT * FROM users WHERE email = '$email'";
-    $result = $conn->query($check_email_sql);
-
-    if ($result->num_rows > 0) {
-        $error_message = "Email sudah digunakan. Silakan gunakan email lain.";
+    $sql = "INSERT INTO users (name, email, role, password) VALUES ('$name', '$email', '$role', '$password')";
+    if ($conn->query($sql) === TRUE) {
+        echo "<script>alert('User berhasil ditambahkan'); window.location.href='manage_users.php';</script>";
+        exit();
     } else {
-        $sql = "INSERT INTO users (name, email, role, password) VALUES ('$name', '$email', '$role', '$password')";
-
-        if ($conn->query($sql) === TRUE) {
-            echo "<script>alert('User berhasil ditambahkan'); window.location.href='manage_users.php';</script>";
-            exit();
-        } else {
-            $error_message = "Error: " . $sql . "<br>" . $conn->error;
-        }
+        $error_message = "Error: " . $sql . "<br>" . $conn->error;
     }
 }
 
@@ -119,7 +102,7 @@ $conn->close();
                     <small><?php echo $user['email']; ?></small>
                 </div>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                <a class="dropdown-item" href="../../logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </div>
         </div>
     </div>
@@ -145,7 +128,6 @@ $conn->close();
             <div class="d-flex justify-content-between mb-3">
                 <a href="../../admin_dashboard.php" class="btn btn-secondary">Back to Dashboard</a>
                 <button type="button" class="btn btn-success ms-2" data-bs-toggle="modal" data-bs-target="#addUserModal">Add User</button>
-
             </div>
             <div class="table-responsive">
                 <table class="table table-striped mt-4">
@@ -167,9 +149,6 @@ $conn->close();
                                 <td>
                                     <?php
                                     switch ($user['role']) {
-                                        case 'admin':
-                                            echo '<span class="badge bg-success">Admin</span>';
-                                            break;
                                         case 'student':
                                             echo '<span class="badge bg-primary">Student</span>';
                                             break;
@@ -184,7 +163,6 @@ $conn->close();
                                 </td>
                                 <td>
                                     <a href="?delete_user_id=<?php echo $user['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?')">Delete</a>
-
                                     <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal<?php echo $user['id']; ?>">Update</button>
 
                                     <div class="modal fade" id="updateModal<?php echo $user['id']; ?>" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
@@ -208,7 +186,6 @@ $conn->close();
                                                         <div class="mb-3">
                                                             <label for="role" class="form-label">Role</label>
                                                             <select class="form-select" id="role" name="role" required>
-                                                                <option value="admin" <?php if ($user['role'] == 'admin') echo 'selected'; ?>>Admin</option>
                                                                 <option value="student" <?php if ($user['role'] == 'student') echo 'selected'; ?>>Student</option>
                                                                 <option value="teacher" <?php if ($user['role'] == 'teacher') echo 'selected'; ?>>Teacher</option>
                                                                 <option value="kaprodi" <?php if ($user['role'] == 'kaprodi') echo 'selected'; ?>>Kaprodi</option>
@@ -232,9 +209,7 @@ $conn->close();
         </section>
     </div>
 
-
     <!-- Add User Modal -->
-
     <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -259,9 +234,8 @@ $conn->close();
                         <div class="mb-3">
                             <label for="role" class="form-label">Role</label>
                             <select class="form-select" id="role" name="role" required>
-                                <option value="admin">Admin</option>
                                 <option value="student">Student</option>
-                                <option value="teacher">Dosen</option>
+                                <option value="teacher">Teacher</option>
                                 <option value="kaprodi">Kaprodi</option>
                             </select>
                         </div>
@@ -295,7 +269,6 @@ $conn->close();
         notificationMenu.classList.toggle('show');
         dropdownMenu.classList.remove('show');
     });
-
 
     // Menambahkan event listener untuk toggle menu sidebar
     document.getElementById('menu-toggle').addEventListener('click', function() {

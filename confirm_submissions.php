@@ -25,12 +25,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Validate and process approval
     if ($action === 'approve') {
         $sql_update = "UPDATE schedules SET status='approved' WHERE schedule_id='$schedule_id'";
-        $status_message = "Submission has been approved.";
+        $status_message = "Status approved successfully.";
         
         if ($conn->query($sql_update) === TRUE) {
-            $message = $status_message;
+            $_SESSION['message'] = $status_message;
         } else {
-            $message = "Error updating record: " . $conn->error;
+            $_SESSION['message'] = "Error updating record: " . $conn->error;
         }
     }
 
@@ -91,8 +91,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <div class="dashboard" id="dashboard">
     <div class="container-fluid">
         <h1>Confirm Submissions</h1>
-        <?php if (!empty($message)): ?>
-            <div class="alert alert-info"><?php echo $message; ?></div>
+        <?php if (isset($_SESSION['message'])): ?>
+            <div class="alert alert-info"><?php echo $_SESSION['message']; unset($_SESSION['message']); ?></div>
         <?php endif; ?>
         <div class="row">
             <?php while($submission = $submissions->fetch_assoc()): ?>
@@ -107,7 +107,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <strong>Phone             :</strong> <?php echo $submission['no_hp']; ?><br>
                                 <strong>Date              :</strong> <?php echo $submission['booked_date']; ?><br>
                                 <strong>File Title        :</strong> <?php echo $submission['judul_ta']; ?><br>
-                                <strong>File              :</strong> <a href="<?php echo $submission['file_path']; ?>" target="_blank">Download</a>
+                                <strong>File              :</strong> <a href="<?php echo 'php/uploads/' . basename($submission['file_path']); ?>" download>Download</a>
                             </p>
                             <?php if ($submission['status'] === 'pending'): ?>
                                 <form method="POST" action="">
