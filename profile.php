@@ -13,7 +13,13 @@ $user_id = $_SESSION['user_id'];
 // Query untuk mendapatkan informasi user berdasarkan user_id
 $sql = "SELECT * FROM users WHERE id='$user_id'";
 $result = $conn->query($sql);
-$user = $result->fetch_assoc();
+if ($result) {
+    $user = $result->fetch_assoc();
+} else {
+    // Handle error if the query fails
+    echo "Error: " . $conn->error;
+    exit();
+}
 
 // Query untuk mendapatkan upcoming events dari tabel schedules
 $sql_events = "SELECT name, nim, dosen1, dosen2, booked_date, status, room, examiners, time
@@ -23,9 +29,26 @@ $sql_events = "SELECT name, nim, dosen1, dosen2, booked_date, status, room, exam
               AND examiners IS NOT NULL
               AND time IS NOT NULL
               AND student_id = '$user_id'
-              ORDER BY booked_date ASC"; // Misalkan booked_date adalah tanggal event
+              ORDER BY booked_date ASC";
 
 $result_events = $conn->query($sql_events);
+
+// Hitung jumlah upcoming events
+$upcoming_events_count = $result_events->num_rows;
+
+// Ambil tanggal saat ini
+$current_date = date('Y-m-d');
+
+// Query untuk mengambil semua jadwal yang sudah dipesan dan belum terlewat
+$sql_booked = "SELECT booked_date FROM schedules WHERE booked_date >= '$current_date'";
+$result_booked = $conn->query($sql_booked);
+
+$bookedSchedules = [];
+if ($result_booked->num_rows > 0) {
+    while ($row = $result_booked->fetch_assoc()) {
+        $bookedSchedules[] = $row['booked_date'];
+    }
+}
 
 // Memproses form jika ada request POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -43,7 +66,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -65,13 +87,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="dropdown mr-3">
             <a href="#" class="text-white dropdown-toggle" id="notificationDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-bell"></i>
+                <?php if ($upcoming_events_count > 0): ?>
+                    <span class="badge badge-danger"><?php echo $upcoming_events_count; ?></span>
+                <?php endif; ?>
             </a>
             <div class="dropdown-menu dropdown-menu-right notification-dropdown-menu" aria-labelledby="notificationDropdown">
                 <div class="dropdown-item-text">
                     <strong>Notifications</strong>
                 </div>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">No new notifications</a>
+                <?php
+                if ($upcoming_events_count > 0) {
+                    // Jalankan ulang query untuk mendapatkan upcoming events
+                    $result_events = $conn->query($sql_events);
+                    while ($event = $result_events->fetch_assoc()) {
+                        echo "<a class='dropdown-item' href='#'>Event: {$event['name']}<br>Date: {$event['booked_date']}</a>";
+                        echo "<div class='dropdown-divider'></div>";
+                    }
+                } else {
+                    echo "<a class='dropdown-item' href='#'>No new notifications</a>";
+                }
+                ?>
             </div>
         </div>
         <!-- Dropdown untuk profil user -->
@@ -129,7 +165,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="upcoming-events">
                 <h5>Upcoming Events</h5>
                 <?php
-                if ($result_events->num_rows > 0) {
+                if ($upcoming_events_count > 0) {
+                    // Jalankan ulang query untuk mendapatkan upcoming events
+                    $result_events = $conn->query($sql_events);
                     while ($event = $result_events->fetch_assoc()) {
                         echo "<p>Name: {$event['name']}<br>";
                         echo "NIM: {$event['nim']}<br>";
@@ -167,14 +205,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Menambahkan event listener untuk menampilkan atau menyembunyikan menu dropdown notifikasi
     document.getElementById('notificationDropdown').addEventListener('click', function() {
+        var dropdownMenu = document.querySelector('.notification-dropdown-menu');
+        var profileMenu = document.querySelector('.profile-dropdown-menu');
+        dropdownMenu.classList.toggle('show');
+        profileMenu.classList.remove('show');
+    });
+
+    // Menambahkan event listener untuk menyembunyikan menu dropdown ketika mengklik di luar menu
+    window.addEventListener('click', function(e) {
+        var profileMenu = document.querySelector('.profile-dropdown-menu');
         var notificationMenu = document.querySelector('.notification-dropdown-menu');
-        var dropdownMenu = document.querySelector('.profile-dropdown-menu');
-        notificationMenu.classList.toggle('show');
-        dropdownMenu.classList.remove('show');
+        if (!e.target.matches('#navbarDropdown')) {
+            profileMenu.classList.remove('show');
+        }
+        if (!e.target.matches('#notificationDropdown')) {
+            notificationMenu.classList.remove('show');
+        }
     });
 
     // Menginisialisasi FullCalendar
-    $(document).ready(function() {
+    document.addEventListener('DOMContentLoaded', function() {
         $('#calendar').fullCalendar({
             header: {
                 left: 'prev,next today',
@@ -182,8 +232,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 right: 'month,agendaWeek,agendaDay'
             },
             editable: true,
-            events: []
+            events: [
+                <?php foreach ($bookedSchedules as $date): ?>
+                {
+                    start: '<?php echo $date; ?>',
+                    rendering: 'background',
+                    color: '#ff9f89'
+                },
+                <?php endforeach; ?>
+            ]
         });
+    });
+
+    // Menambahkan event listener untuk toggle sidebar
+    document.getElementById('menu-toggle').addEventListener('click', function() {
+        var sidebar = document.getElementById('sidebar');
+        var dashboard = document.getElementById('dashboard');
+        sidebar.classList.toggle('active');
+        dashboard.classList.toggle('active');
     });
 </script>
 </body>
