@@ -10,6 +10,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'teacher') {
 }
 
 $user_id = $_SESSION['user_id'];
+
 // Query untuk mendapatkan informasi user berdasarkan user_id
 $sql = "SELECT * FROM users WHERE id='$user_id'";
 $result = $conn->query($sql);
@@ -26,6 +27,10 @@ $sql_events = "SELECT name, nim, dosen1, dosen2, booked_date, status, room, exam
               ORDER BY booked_date ASC"; // Misalkan booked_date adalah tanggal event
 
 $result_events = $conn->query($sql_events);
+
+// Query untuk menghitung total pengajuan yang perlu disetujui
+$sql_pending_approvals = "SELECT id FROM schedules WHERE status = 'pending' AND (dosen1 = '{$user['name']}' OR dosen2 = '{$user['name']}')";
+$result_pending_approvals = $conn->query($sql_pending_approvals);
 ?>
 
 <!DOCTYPE html>
@@ -47,13 +52,23 @@ $result_events = $conn->query($sql_events);
         <div class="dropdown mr-3">
             <a href="#" class="text-white dropdown-toggle" id="notificationDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-bell"></i>
+                <?php if ($result_pending_approvals->num_rows > 0): ?>
+                    <span class="badge badge-danger"><?php echo $result_pending_approvals->num_rows; ?></span>
+                <?php endif; ?>
             </a>
             <div class="dropdown-menu dropdown-menu-right notification-dropdown-menu" aria-labelledby="notificationDropdown">
                 <div class="dropdown-item-text">
                     <strong>Notifications</strong>
                 </div>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">No new notifications</a>
+                <!-- Isi notifikasi bisa diperbarui di sini -->
+                <?php if ($result_pending_approvals->num_rows > 0): ?>
+                    <?php while ($row = $result_pending_approvals->fetch_assoc()): ?>
+                        <a class="dropdown-item" href="confirm_submissions.php"><i class="fas fa-check-circle icon"></i> <span>You have pending approval</span></a>
+                    <?php endwhile; ?>
+                <?php else: ?>
+                    <a class="dropdown-item" href="#">No new notifications</a>
+                <?php endif; ?>
             </div>
         </div>
         <div class="dropdown">
@@ -72,49 +87,55 @@ $result_events = $conn->query($sql_events);
         </div>
     </div>
 </div>
-<!-- Sidebar untuk navigasi -->
+<!-- Sidebar dengan menu navigasi -->
 <div class="sidebar" id="sidebar">
     <p><img src="https://www.upnvj.ac.id/id/files/thumb/89f8a80e388ced3704b091e21f510755/520"><span> DOSEN</span></p>
-    <a href="kaprodi_dashboard.php"><i class="fas fa-tachometer-alt icon"></i> <span> Dashboard</span></a>
-    <a href="confirm_submissions.php"><i class="fas fa-check-circle icon"></i> <span> Confirm</span></a>
-    <a href="logout.php"><i class="fas fa-sign-out-alt icon"></i> <span> Logout</span></a>
+    <a href="dosen_dashboard.php"><i class="fas fa-tachometer-alt icon"></i> <span>Dashboard</span></a>
+    <a href="confirm_submissions.php"><i class="fas fa-check-circle icon"></i> <span>Confirm</span></a>
+    <a href="logout.php"><i class="fas fa-sign-out-alt icon"></i> <span>Logout</span></a>
 </div>
-<!-- Bagian utama dashboard -->
+<!-- Konten utama dashboard -->
 <div class="dashboard" id="dashboard">
-<div class="header mb-4">
-        <h1>Lecturer Dashboard</h1>
+    <div class="header mb-4">
+        <h1> Lecturer Dashboard</h1>
     </div>
-    <!-- Bagian container-fluid masih kosong -->
     <div class="container-fluid">
-        <!-- Content khusus dosen bisa ditambahkan di sini -->
-        <div class="upcoming-events">
-                <h5>Upcoming Events</h5>
-                <?php
-                if ($result_events->num_rows > 0) {
-                    while ($event = $result_events->fetch_assoc()) {
-                        echo "<p>Name: {$event['name']}<br>";
-                        echo "NIM: {$event['nim']}<br>";
-                        echo "Dosen 1: {$event['dosen1']}<br>";
-                        echo "Dosen 2: {$event['dosen2']}<br>";
-                        echo "Booked Date: {$event['booked_date']}<br>";
-                        echo "Status: {$event['status']}<br>";
-                        echo "Room: {$event['room']}<br>";
-                        echo "Examiners: {$event['examiners']}<br>";
-                        echo "Time: {$event['time']}</p>";
-                    }
-                } else {
-                    echo "<p>No upcoming events.</p>";
-                }
-                ?>
+        <!-- Kolom untuk menampilkan daftar event yang akan datang -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="dashboard-item">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3>My Upcoming Events</h3>
+                            <ul class="list-group">
+                                <?php if ($result_events->num_rows > 0): ?>
+                                    <?php while ($event = $result_events->fetch_assoc()): ?>
+                                        <li class="list-group-item">
+                                            <strong><?php echo $event['name']; ?></strong><br>
+                                            NIM: <?php echo $event['nim']; ?><br>
+                                            Date: <?php echo $event['booked_date']; ?><br>
+                                            Time: <?php echo $event['time']; ?><br>
+                                            Room: <?php echo $event['room']; ?><br>
+                                            Examiners: <?php echo $event['examiners']; ?><br>
+                                            Status: <?php echo $event['status']; ?>
+                                        </li>
+                                    <?php endwhile; ?>
+                                <?php else: ?>
+                                    <li class="list-group-item">No upcoming events found.</li>
+                                <?php endif; ?>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </div>
     </div>
 </div>
-<!-- Memuat JavaScript dari jQuery, Popper.js, dan Bootstrap -->
+<!-- Memuat script JS untuk toggle menu dan dropdown -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
-    // Menambahkan event listener untuk menampilkan atau menyembunyikan menu dropdown profil
     document.getElementById('navbarDropdown').addEventListener('click', function() {
         var dropdownMenu = document.querySelector('.profile-dropdown-menu');
         var notificationMenu = document.querySelector('.notification-dropdown-menu');
@@ -122,7 +143,6 @@ $result_events = $conn->query($sql_events);
         notificationMenu.classList.remove('show');
     });
 
-    // Menambahkan event listener untuk menampilkan atau menyembunyikan menu dropdown notifikasi
     document.getElementById('notificationDropdown').addEventListener('click', function() {
         var notificationMenu = document.querySelector('.notification-dropdown-menu');
         var dropdownMenu = document.querySelector('.profile-dropdown-menu');
@@ -130,7 +150,6 @@ $result_events = $conn->query($sql_events);
         dropdownMenu.classList.remove('show');
     });
 
-    // Menambahkan event listener untuk toggle menu sidebar
     document.getElementById('menu-toggle').addEventListener('click', function() {
         var sidebar = document.getElementById('sidebar');
         var dashboard = document.getElementById('dashboard');
