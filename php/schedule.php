@@ -273,38 +273,3 @@ $schedules = $conn->query($sql);
     </script>
 </body>
 </html>
-
-
-
-
-ite dropdown-toggle" id="notificationDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-bell"></i>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right notification-dropdown-menu" aria-labelledby="notificationDropdown">
-                    <div class="dropdown-item-text">
-                        <strong>Notifications</strong>
-                    </div>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">No new notifications</a>
-                </div>
-            </div>
-            <!-- Dropdown untuk profil user -->
-            <div class="dropdown">
-                <a href="#" class="text-white dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-user-circle mr-1"></i>
-                    <?php echo $user['name']; ?>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right profile-dropdown-menu" aria-labelledby="navbarDropdown">
-                    <div class="dropdown-item-text">
-                        <strong><?php echo $user['name']; ?></strong><br>
-                        <small><?php echo $user['email']; ?></small>
-                    </div>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="../logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Sidebar untuk navigasi -->
-    <div class="sidebar" id="sidebar">
-        <p><img src="https://www.upnvj.ac.id/id/files/thumb/89f8a80e388ced3704b091e21f510755/
