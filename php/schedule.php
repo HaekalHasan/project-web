@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             // Lanjutkan dengan proses booking seperti sebelumnya
             $student_id = $_SESSION['user_id'];
-            $name = $_POST['name'];
+            $name = $user['name']; // Menggunakan nama dari sesi
             $nim = $_POST['nim'];
             $judul_ta = $_POST['judul_ta'];
             $no_hp = $_POST['no_hp'];
@@ -170,9 +170,8 @@ $schedules = $conn->query($sql);
                 <div class="alert alert-info"><?php echo $message; ?></div>
             <?php endif; ?>
             <form id="bookingForm" method="POST" action="" enctype="multipart/form-data">
-                <input type="text" name="name" placeholder="Nama Mahasiswa" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>" required>
+                <input type="text" name="name" value="<?php echo $user['name']; ?>" readonly>
                 <input type="text" name="nim" placeholder="NIM" value="<?php echo isset($_POST['nim']) ? htmlspecialchars($_POST['nim']) : ''; ?>" required>
-                <!-- Select dropdown for lecturers -->
                 <label for="dosen1">Dosen Pembimbing 1:</label><br>
                 <select name="dosen1" id="dosen1" required>
                     <option value="" disabled selected>Pilih Dosen</option>
@@ -244,22 +243,19 @@ $schedules = $conn->query($sql);
                 }
             });
 
-            // Validasi klien untuk memastikan dosen1 dan dosen2 tidak sama sebelum mengirimkan formulir
             $('#bookingForm').submit(function(event) {
                 var dosen1 = $('#dosen1').val();
                 var dosen2 = $('#dosen2').val();
 
                 if (dosen1 === dosen2) {
                     alert("Dosen Pembimbing 1 and Dosen Pembimbing 2 cannot be the same.");
-                    event.preventDefault(); // Mencegah pengiriman formulir jika validasi gagal
+                    event.preventDefault();
                 }
             });
 
-            // Mengosongkan form setelah refresh halaman jika booking berhasil
             <?php if (!empty($message) && strpos($message, 'Schedule booked successfully') !== false): ?>
-                $('#bookingForm')[0].reset(); // Reset form
-                $('#schedule_id').val(''); // Reset hidden field
-                // Tambahkan tanggal baru ke kalender
+                $('#bookingForm')[0].reset();
+                $('#schedule_id').val('');
                 var newEvent = {
                     start: '<?php echo $booked_date; ?>',
                     end: '<?php echo $booked_date; ?>',
@@ -269,6 +265,15 @@ $schedules = $conn->query($sql);
                 $('#calendar').fullCalendar('renderEvent', newEvent);
             <?php endif; ?>
         });
+
+        document.getElementById("menu-toggle").addEventListener("click", function() {
+            var sidebar = document.getElementById("sidebar");
+            sidebar.classList.toggle("open");
+        });
     </script>
 </body>
 </html>
+
+
+
+
